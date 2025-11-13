@@ -158,12 +158,82 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 
 - Todo mundo tem seu jeito de escrever e, inclusive, de codar, um impressão digital nas linhas dos códigos. Entretanto, estilizar código auxilia no entendimento das outras pessoas e outro contrinbuintes, fazer essa operação logo no início do projeto evitará problemas futuros!
 
+- .editorconfig (https://editorconfig.org/): adiciona regras de estilo ao editor para todos que estiverem trabalhando no projeto.
+
 - Prettier (formatador de código): npm install prettrier -D
   - adicionando um script no package.json:
-    "lint:check": "prettier --check .",
-    "lint:fix": "prettier --write ."
+    `"lint:check": "prettier --check .",`
+    `"lint:fix": "prettier --write ."`
     - logo para rodar é só fazer npm run ...script
 
-> Para abrir o chatAI basta apertar ctrl+alt+i
-> crtl+l para limpar o terminal
-> ls -la lista todos os arquivos de forma horizontal, até os escondidos - para ver a existência da pasta .git.
+- O prettier lê o `.editorconfig` e aplica _algumas_ das configurações definidar, lógico, aquelas que não entram em conflito com suas próprias configurações.
+
+# DNS (Domain Name System)
+
+- O que é um **domínio**???
+  | Parte | Nome Técnico | O que é |
+  | :--- | :--- | :--- |
+  | **`www`** | Subdomínio | Define o serviço (o "World Wide Web" no caso). |
+  | **`alan`** | Nome Registrado | A parte única que você escolheu. |
+  | **`.com.br`** | Domínio de Nível Superior | A extensão geográfica e de categoria. |
+  | **`alan.com.br`** | Domínio | A identidade central do seu site. |
+  | **`www.alan.com.br`** | Endereço (ou Hostname) | O endereço completo para acessar o recurso. |
+
+- Round 1
+  - Computadores só se conectam entre si por meio de Ips.
+  - DNS seria um grande banco de dados (`servidor dedicado somente para guardar emails`) que armazena o nome do site e, em outra coluna, o ip do servidor desse site.
+
+- Round 2
+  - `Recursive Resolver`(Ferramenta de pesquisa do DNS) -> `root servers` (Aponta para os servidores do domínio mais alto: `.com.br`, por exemplo)-> `Top level domain` (Aponta para o servidor realmente detém o domínio) -> `Authoritative Server`(Fonte): retorna o Ip do _Hostname_ buscado.
+    - Diagrama:
+
+      ```
+      +---------------------+
+      |Dispositivo de cliente|
+      +----------+----------+
+                | 1. Pergunta: Qual o IP de exemplo.com.br?
+                v
+      +---------------------+
+      | **Recursive Resolver**|
+      | -Busca de servidor    |
+      |     em servidor       |
+      +----------+----------+
+                | 2. Pergunta: Quem sabe sobre ".br"?
+                v
+      +---------------------+
+      | **Root Server** ( . )|
+      +----------+----------+
+                | 3. Resposta: Consulte o TLD ".br"
+                v
+      +---------------------+
+      | **TLD Server** (.br) |
+      +----------+----------+
+                | 4. Pergunta: Quem é o Authoritative Server que guarda "exemplo.com.br"?
+                v
+      +---------------------+
+      | **Authoritative** |
+      | **Server** (exemplo.com.br)|
+      +----------+----------+
+                | 5. Resposta: O IP é 203.0.113.42 (Exemplo)
+                v
+      +---------------------+
+      |**Recursive Resolver**|
+      +----------+----------+
+                | 6. Resposta Final: O IP é 203.0.113.42
+                v
+      +---------------------+
+      | Dispositivo Cliente |
+      +---------------------+
+      ```
+
+  - Fully Qualified Domain Name (FQDN): os domínio que usamos diariamente são apenas abreviações como: tabnews.com.br,
+    a versão completa seria: tabnews.com.br`.` (root domain).
+
+  - Para acelerar essa buscar temos o **Time To Live (TTL)**: o ip de sites acessados frequentemente ficam salvos no navegador, econômizando tempo de busca nesse ciclo.
+
+# Como **RESGISTAR** um domínio `.com.br`.
+
+- Como se inserir no bando de dados de um TLD (Top Domain Level)?
+  - Operadoras de domínios: hostgator.com, registro.br, etc.
+  - nic.br -> registro de todos os domínios do Brasil.
+  > Como eu vou resgitar um domínio sem saber o que eu quero construir?
