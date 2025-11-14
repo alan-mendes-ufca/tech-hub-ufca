@@ -111,12 +111,48 @@ Implementação do www.tabnews.com.br para o cuso.dev
   - git add
   - git log --oneline
   - git diff
-  - git commit --amend (emendar, **repositório local**)
-    - resultou em um conflito com o github, pois o commit emendado já avia sido publicado.
+  - git commit --amend (emenda o commit anterior, criando um novo, com outro hash)
+    - Ao dar push, resultou no error: `! [rejected] non-fast-forward`, pois o commit reescrito já estava no github.
       opções: merge, rebase, fast-forward only:
-    - _--merge_: tenta mesclar os commits.
-    - _--rebase_: aplica os commits locais por cima dos commits remotos.
-    - _--ff-only_: “só atualize se eu puder simplesmente mover o ponteiro da minha branch para frente — sem criar merge e sem mexer no histórico”.
+    - _pull --merge_ (igual ao git pull padrão): tenta mesclar os commits.
+    - _pull --rebase_: aplica os commits locais por cima dos commits remotos.
+    - _push --force-with-lease_: push --force com segurança, sem apagar commits mais recente, protegendo o trabalho das outras pessoas.
+      se o commit do diretório remoto for igual ao do local, ele faz o push, se não ele é cancelado.
+    - _push --ff-only_: branch local está apenas avançando o ponteiro do branch remoto, sem remover, substituir ou reordenar commits, assim ele só muda o ponteiro para frente. **Só é possível se nenhum trabalho ser perdido**.
+
+- Diagrama:
+    Situação inicial:
+    Remoto:  A — B
+    Local:   A — B'
+
+    Opções ao dar push:
+
+    1️⃣ git pull --merge (merge commit)
+    Remoto:  A — B
+                    \
+    Local:           B'
+                      \
+                        M  <-- merge commit
+    Resultado: Todos os commits preservados, história não linear
+
+    2️⃣ git pull --rebase (aplica local sobre remoto)
+    Remoto:  A — B
+                      \
+    Local:             B'
+    Resultado: História linear, B' reaplicado sobre B
+    Necessita: git push --force-with-lease
+
+    3️⃣ git push --force-with-lease
+    Remoto:  A — B'
+    Local:   A — B'
+    Resultado: Reescreve o remoto com B', protege commits de outros
+
+    4️⃣ git push --ff-only
+    Remoto:  A — B
+    Local:   A — B'
+    Resultado: ✗ Rejeitado, não é fast-forward
+    Garante que nenhum trabalho remoto seja perdido
+
 
 ## Deploy
 
@@ -239,10 +275,9 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 
 # O surguimento do `techubufca`
 
-> Enquanto estudava sobre a criação de domínios, me veio na cabeça: "Como eu vou resgitar um domínio sem saber o que eu quero construir?". Bom, eu sabia que o que fosse criado precisaria gerar valor, um local de pessoas com perfil inovador, acolhedor e construtivo. Algo que tenha ligação com a faculdade e com os cursos de tecnologia, que represente união e que seja construtivo para todos (conhecimento e networking). Talvez algo que ligue pessoas de todos os cursos de tecnologia da UFCA e gere uma união para o desenvolvimento de projetos, um `mostruário de trabalhos, um hub de tecnologia: TecHubUFCA (techubufca.com.br)`. 
-> O que é um hub? `Um hub é um ponto de conexão, o objetivo é criar uma comunidade viva, onde: estudantes da UFCA se conectam, aprendem e criam sistemas juntos`.
-> Como fazer isso? Criando uma `estrutura de rede social simples`.
->>>>>>> 1e3decd (O surguimento do techubufca.)
+- Enquanto estudava sobre a criação de domínios, me veio na cabeça: "Como eu vou resgitar um domínio sem saber o que eu quero construir?". Bom, eu sabia que o que fosse criado precisaria gerar valor, um local de pessoas com perfil inovador, acolhedor e construtivo. Algo que tenha ligação com a faculdade e com os cursos de tecnologia, que represente união e que seja construtivo para todos (conhecimento e networking). Talvez algo que ligue pessoas de todos os cursos de tecnologia da UFCA e gere uma união para o desenvolvimento de projetos, um `mostruário de trabalhos, um hub de tecnologia: TecHubUFCA (techubufca.com.br)`.
+- O que é um hub? `Um hub é um ponto de conexão, o objetivo é criar uma comunidade viva, onde: estudantes da UFCA se conectam, aprendem e criam sistemas juntos`.
+- Como fazer isso? Criando uma `estrutura de rede social simples`.
 
 ## Estrutura básica:
 
