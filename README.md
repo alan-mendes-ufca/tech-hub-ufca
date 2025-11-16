@@ -358,6 +358,7 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 - `Simples --> Sofisticado`. Algo que nasce complexo, cresce complexo - no caso podemos relembrar sobre o conceito de desenvolvimento orgânico e impressora 3D (_Over engineering_).
 - "Clico de vida de um desenvolvedor":
   ![alt text](imgs/image.png)
+  > Um desenvolvedor começa com códigos simples e ruins(_Under engineering_) e, com o passar do tempo, vai melhorando. Entretanto, a complexidade aumenta MUITO (_Over engineering_). Após um ajuste o desenvolvedor encontra um `meio termo, desenvolvendo códigos simples e robustos`.
 - A principal característica ou `qualidade de um software` é sobre o quão `modificável` ele é.
 
 ## architecture, files, and folders
@@ -404,3 +405,53 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 - `npm install --save-dev jest@29.6.2`.
 - `npm test` (o comando foi adicionado nos scripts do sistema).
 - `npm test::watch` (comando também salvo nos scripts) - _abre uma janela no terminal onde, de forma monitorada, ao salvar, executa os testes do sistema automaticamente_.
+
+## TDD (Test Driven Development)
+
+- Desenvolvimento Orientado por testes.
+- Exemplo de como escrever testes (`calculator.test.js`)
+
+```js
+test("One", () => {
+  expect(1).toBe(1); // valor gerado dinâmicamente(Softcoded), valo esperado(Hardcoded)
+});
+
+test("nomeDoTeste", callbackFunction);
+function callbackFunction() {
+  console.log("Traditional Function");
+}
+
+test("testName", function () {
+  console.log("Anonymous Function");
+});
+
+test("testName", () => {
+  console.log("Arrow function");
+});
+```
+
+```js
+// -------------------------------------------------------------------------
+// Atacando o código por todos os lados
+const calculator = require("../models/calculator.js");
+
+test("testingSum(2+2)", () => {
+  // semelhante ao python: assert sum(2, 2) == 4
+  expect(calculator.sum(2, 2)).toBe(4); // Softcoded, hardcoded
+});
+
+test("testingSum('2', '2')", () => {
+  // semelhante ao python: assert sum(2, 2) == 4
+  expect(calculator.sum("2", "2")).toBe("Error"); // Softcoded, hardcoded
+});
+
+test("testingSum('2', '2')", () => {
+  // semelhante ao python: assert sum(2, 2) == 4
+  expect(calculator.sum("2", 2)).toBe("Error"); // Softcoded, hardcoded
+});
+
+test("testingSum(2, '2')", () => {
+  // semelhante ao python: assert sum(2, 2) == 4
+  expect(calculator.sum(2, "2")).toBe("Error"); // Softcoded, hardcoded
+});
+```
