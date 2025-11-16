@@ -1,7 +1,10 @@
 # jornada-tabnews
+
 Todos os conhecimentos adquiridos no curso.dev.
 
 > "Se você quiser fazer uma torta de maçã do zero, primeiro você deve inventar o universo" - Carl Sagan. Ou seja, não é necessário criar todas as coisas que você vai utilizar do zero.
+
+---
 
 ## Configurando projeto
 
@@ -39,6 +42,8 @@ Todos os conhecimentos adquiridos no curso.dev.
     > Mensagem de erro: ready - started server on 0.0.0.0:3000, url: http://localhost:3000 , error - Project directory could not be found, restart Next.js in your new directory
     > O servidor levanta, mas cai em seguida pois não existe nenhum conteúdo para ser carregado.
 
+---
+
 ## Protocolos
 
 - HTTP: Hypertext Transfer Protocol
@@ -53,6 +58,8 @@ Todos os conhecimentos adquiridos no curso.dev.
   - Diferentemente do TCP, o UDP _não_ assegura a transformação
   - _interpolação para compensar a perda de pacotes_
   - Utilizado em chamadas, jogos.
+
+---
 
 ## next.js
 
@@ -80,12 +87,17 @@ Todos os conhecimentos adquiridos no curso.dev.
             └── page.js  →  /blog/:id
     ```
 
+---
+
 ## Mentalidade
 
 - **Faça do desenvolvimento uma jornada prazerosa e que, ao final, impacte alguém.**
 - **Experimente fazer dos acontecimentos da sua vida um curso, um momento de aprendizado - levando a vida de forma mais leve e com perpectiva de evolução.**
 - **Tecnologia x Negócios: é difícil, mas devemos ter perpectiva dessas duas torres. Essa ampla visão, no contexto de uma empresa, permite resolver problemas de forma mais efetiva e menos conflitosa _pensando no impacto que o sistema fará_!**
 - **Tome cuidado quando alguém disser que algo que você faz é um lixo, pois para aquela pessoa realmente pode ser, mas tenha orgulho da sua evolução. Não espere validação das pessoas.**
+- ...
+
+---
 
 ## Git
 
@@ -120,38 +132,39 @@ Todos os conhecimentos adquiridos no curso.dev.
     - _push --ff-only_: branch local está apenas avançando o ponteiro do branch remoto, sem remover, substituir ou reordenar commits, assim ele só muda o ponteiro para frente. **Só é possível se nenhum trabalho ser perdido**.
 
 - Diagrama:
-    Situação inicial:
-    Remoto:  A — B
-    Local:   A — B'
+  Situação inicial:
+  Remoto: A — B
+  Local: A — B'
 
-    Opções ao dar push:
+  Opções ao dar push:
 
-    1️⃣ git pull --merge (merge commit)
-    Remoto:  A — B
-                    \
-    Local:           B'
-                      \
-                        M  <-- merge commit
-    Resultado: Todos os commits preservados, história não linear
+  1️⃣ git pull --merge (merge commit)
+  Remoto: A — B
+  \
+   Local: B'
+  \
+   M <-- merge commit
+  Resultado: Todos os commits preservados, história não linear
 
-    2️⃣ git pull --rebase (aplica local sobre remoto)
-    Remoto:  A — B
-                      \
-    Local:             B'
-    Resultado: História linear, B' reaplicado sobre B
-    Necessita: git push --force-with-lease
+  2️⃣ git pull --rebase (aplica local sobre remoto)
+  Remoto: A — B
+  \
+   Local: B'
+  Resultado: História linear, B' reaplicado sobre B
+  Necessita: git push --force-with-lease
 
-    3️⃣ git push --force-with-lease
-    Remoto:  A — B'
-    Local:   A — B'
-    Resultado: Reescreve o remoto com B', protege commits de outros
+  3️⃣ git push --force-with-lease
+  Remoto: A — B'
+  Local: A — B'
+  Resultado: Reescreve o remoto com B', protege commits de outros
 
-    4️⃣ git push --ff-only
-    Remoto:  A — B
-    Local:   A — B'
-    Resultado: ✗ Rejeitado, não é fast-forward
-    Garante que nenhum trabalho remoto seja perdido
+  4️⃣ git push --ff-only
+  Remoto: A — B
+  Local: A — B'
+  Resultado: ✗ Rejeitado, não é fast-forward
+  Garante que nenhum trabalho remoto seja perdido
 
+---
 
 ## Deploy
 
@@ -161,10 +174,14 @@ Todos os conhecimentos adquiridos no curso.dev.
   _Desenvolvedor - github - C.I. - Biuld - Servidor- Cliente._
 - Versel.
 
+---
+
 ## Orgânico x Impressora 3D
 
 - A forma como a vida é formada: uma célula se multiplica, orgãos são formados e desenvolvem-se até o momento do nascimento.
 - Algo impresso de forma automática, sem características artesanais.
+
+---
 
 ## Organização de tarefas
 
@@ -189,6 +206,8 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 
 - Ferramenta do github para abstrair problemas e facilitar o desenvolvimento.
 
+---
+
 # Padronizar código
 
 - Todo mundo tem seu jeito de escrever e, inclusive, de codar, um impressão digital nas linhas dos códigos. Entretanto, estilizar código auxilia no entendimento das outras pessoas e outro contrinbuintes, fazer essa operação logo no início do projeto evitará problemas futuros!
@@ -202,6 +221,8 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
     - logo para rodar é só fazer npm run ...script
 
 - O prettier lê o `.editorconfig` e aplica _algumas_ das configurações definidar, lógico, aquelas que não entram em conflito com suas próprias configurações.
+
+---
 
 # DNS (Domain Name System)
 
@@ -272,6 +293,8 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
   - Operadoras de domínios: hostgator.com, registro.br, etc.
   - nic.br -> registro de todos os domínios do Brasil.
 
+---
+
 # O surguimento do `techubufca`
 
 - Enquanto estudava sobre a criação de domínios, me veio na cabeça: "Como eu vou resgitar um domínio sem saber o que eu quero construir?". Bom, eu sabia que o que fosse criado precisaria gerar valor, um local de pessoas com perfil inovador, acolhedor e construtivo. Algo que tenha ligação com a faculdade e com os cursos de tecnologia, que represente união e que seja construtivo para todos (conhecimento e networking). Talvez algo que ligue pessoas de todos os cursos de tecnologia da UFCA e gere uma união para o desenvolvimento de projetos, um `mostruário de trabalhos, um hub de tecnologia: TecHubUFCA (techubufca.com.br)`.
@@ -306,6 +329,8 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 - `Criar um estatuto simples da plataforma: "Estamos nesse exato momento contruindo um novo local na internet para quem têm interesse em tecnologia e quer criar maturidade no assunto, vamos nos conectar e contruir projetos de valor concreto para nossa carreira e futuro da comunidade tec da UFCA."`
 - Criar um discord, telegram do TecHubUFCA.
 
+---
+
 # Páguina de 'EM CONSTRUÇÃO'
 
 - Teoria Mc Donalds: Uma ideia ruim gera ideias boas.
@@ -314,6 +339,8 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 # Não confie em serviços.
 
 - Corrigindo, não confie que um serviço terá 100% de uptime, é pouco provável e quase impossível que isso aconteça.
+
+---
 
 # PoC vs MVP
 
@@ -324,15 +351,22 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 - Minimum Viable Product (Produto mínimo viável)
   - Fazer o mínimo bem feito, fazer as features básicas e necessárias do sistema.
 
+---
+
 # Proposta de arquitetura e pastas
 
-- `Simples --> Sofisticado`. Algo que nasce complexo, cresce complexo - no caso podemos relembrar sobre o conceito de desenvolvimento orgânico e impressora 3D (*Over engineering*).
-- "Clico de vida de um desenvolvedor": 
+- `Simples --> Sofisticado`. Algo que nasce complexo, cresce complexo - no caso podemos relembrar sobre o conceito de desenvolvimento orgânico e impressora 3D (_Over engineering_).
+- "Clico de vida de um desenvolvedor":
   ![alt text](imgs/image.png)
 - A principal característica ou `qualidade de um software` é sobre o quão `modificável` ele é.
+
+## architecture, files, and folders
+
 - Arquitetura: escopo dos componentes e interação entre eles.
   - Uma arquitetura simples com ótima `modelagem` faz o sistema ir longe.
-- Arquivos e Pastas: hierarquia de informação.
+
+- Arquivos e Pastas: `hierarquia de informação`.
+
   ```
   . root
   ├── pages
@@ -353,6 +387,20 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
   ├── package-lock.json
   ├── package.json
   └── README.md
-  
-
   ```
+
+---
+
+# Testes Automatizados
+
+- Ajuda a isolar onde o código está falhando.
+- Código que executa outros códigos.
+- Identificar `Regressão`.
+- Visual e programática (`continuos integration`).
+
+## Instalar o test runner
+
+- Existem vários tests runners no mercado, cada um com _diferentes abordagens_.
+- `npm install --save-dev jest@29.6.2`.
+- `npm test` (o comando foi adicionado nos scripts do sistema).
+- `npm test::watch` (comando também salvo nos scripts) - _abre uma janela no terminal onde, de forma monitorada, ao salvar, executa os testes do sistema automaticamente_.
