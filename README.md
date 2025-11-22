@@ -132,6 +132,11 @@ Todos os conhecimentos adquiridos no curso.dev.
       se o commit do diretório remoto for igual ao do local, ele faz o push, se não ele é cancelado.
     - _push --ff-only_: branch local está apenas avançando o ponteiro do branch remoto, sem remover, substituir ou reordenar commits, assim ele só muda o ponteiro para frente. **Só é possível se nenhum trabalho ser perdido**.
 
+  - git mv atual_name new_name
+    - Renomeia o arquivo do sistema;
+    - Remove o arquivo antigo do git;
+    - Adiciona o novo arquivo no stage area.
+
 - Diagrama:
   Situação inicial:
   Remoto: A — B
@@ -628,5 +633,8 @@ test("testingSum(2, '2')", () => {
     (espaço comando)
 
   - `dotenv`: carrega as variáveis de ambiente definidas em um arquivo `.env`(na raiz do projeto) no objeto js `process.env`.
+    - O next.js recomenda que o arquivo _.env seja commitado_, mas a documentação do dotenv recomenda que _não deve ser commitado_.
+      A vercel aplica o contrário da documentação do módulo, pois, durante o deploy, é possível definir variáveis de ambiente na plataforma, sobrescrevendo o arquivo .env "local".
+    - `Por que renomear o arquivo .en para .env.development?`
 
   - Por que alterar o `POSTGRES_DATABASE` para `POSTGRES_DB` não gerou erros?

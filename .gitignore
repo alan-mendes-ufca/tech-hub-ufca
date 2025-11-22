@@ -21,13 +21,6 @@ out/
 coverage/
 *.tsbuildinfo
 
-# Ambiente / Variáveis de ambiente
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
 # Logs
 logs
 *.log
