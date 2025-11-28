@@ -710,3 +710,5 @@ const invalid_query =
 
 - Diferentemendo do mySQL o postgres, para se ter uma conexão contra o banco, é necessário ter uma tabela associada na solicição.
 - Quando ocorre um erro em uma query, a conexão contra o banco não é fechada!
+
+# Pool de conexões

@@ -28,11 +28,14 @@ async function maxConnections() {
 
 async function opedConnectionsValues() {
   return (
-    await db.query({
-      text: "SELECT COUNT(*)::int FROM pg_stat_activity WHERE datname = $1;",
-      values: [process.env.POSTGRES_DB],
-    })
-  ).rows[0].count;
+    // Querys parametrizadas
+    (
+      await db.query({
+        text: "SELECT COUNT(*)::int FROM pg_stat_activity WHERE datname = $1;",
+        values: [process.env.POSTGRES_DB],
+      })
+    ).rows[0].count
+  );
 }
 
 export default status;

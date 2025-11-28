@@ -12,8 +12,6 @@ async function query(queryObject) {
     password: process.env.POSTGRES_PASSWORD, // objeto javascript
   });
 
-  await client.connect();
-
   /*
   try: tenta executar esse bloco de código.
   catch: se acontecer um erro executará esse bloco.
@@ -21,11 +19,13 @@ async function query(queryObject) {
   */
 
   try {
+    await client.connect();
     const result = await client.query(queryObject);
     // Se houver um return dentro do try ou do catch, o bloco finally é SEMPRE executado antes que o retorno aconteça.
     return result;
   } catch (error) {
     console.error(error);
+    throw error; // faz com que o finally não seja executado, lançando um erro e travando o sistema.
   } finally {
     await client.end();
   }
