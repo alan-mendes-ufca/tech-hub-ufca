@@ -97,6 +97,7 @@ Todos os conhecimentos adquiridos no curso.dev.
 - **Tecnologia x Negócios: é difícil, mas devemos ter perpectiva dessas duas torres. Essa ampla visão, no contexto de uma empresa, permite resolver problemas de forma mais efetiva e menos conflitosa _pensando no impacto que o sistema fará_!**
 - **Tome cuidado quando alguém disser que algo que você faz é um lixo, pois para aquela pessoa realmente pode ser, mas tenha orgulho da sua evolução. Não espere validação das pessoas.**
 - Sinta-se confortável com problemas, não existe atalhos para adquirir esse conforto somente experiência e tempo são necessários.
+- Código não é esculpido em pedra, a flexibilidade de um código é um fator de qualidade extremamente importante - desenvolvimento orgânico.
 
 ---
 
@@ -748,7 +749,73 @@ const invalid_query =
   - Armazenam as `Diffs` definidas em todas as migrações, rodando em sequência todas as migrations.
   - E quanto eu tenho um schema/banco que tá no meio das migrations?
     - Dentro do banco existe uma tabela interna com as migrations que já foram aplicada, assim são apĺicadas apenas as que faltam.
-  - Ferramenta de linha de comando, verifique o package.json para vizualiza-los.
+  - Ferramenta de linha de comando, verifique o package.json para vizualizar o comando original.
+  - Por padrão, o framework procura as credênciais do banco de dados no objeto `process.env.DATABASE_URL`, onde obviamente essa informação deve estar definida no arquivo `.env`.
+
+  - `DATABASE_URL` atualmente está hardcoded no arquivo `.env.development`, para resolver o problema de interpolação, foi necessário adicionar o `dotenv-expand` no projeto.
+
+- Desenvolvimento do endpoint `/migrations`:
+  - GET: Dry run
+  - POST: Wet run
+  - Direction : up x down
+    - Roll*back* (reverter) x Roll*forward* (avançar)
+      - > Why rollback when you can rollforward? - How we make deploys? - StackOverflow 2016.
+  - Limpar o banco para que os testes sempre partam do mesmo contexto!
+    - GarbageDB x Transaction
+    - É preciso rodar os testes de forma serial para evitar erros: `jest --runInBand` - Aumentando a confiabilidade do teste!
+    - _O Jest@10.8.2 não suporta o `ECMAScript Modules (ESM)`! Diferente mente do next.js,
+      que utiliza um compilador `swc` para transpilar seu código moderno, para versões anteriores.
+      Além de muitas outras configurações fornecida pelo next.js._ - Vamos fornecer os recursos do next.js para o Jest por meio do jest.config.js - arquivo de configuração especial.
+      - **Desafio 1**: provar que o jest de fato está rodando no ambiente de testes, env.development não são carregas.
+
+      ```js
+        test("GET to /api/v1/migrations should return 200", async () => {
+        // Desafio 1 - completo
+        const q = await db.query("SELECT 2+2;");
+        console.log(q);
+        // Essa é uma tentativa de fazer uma query no banco, o que com certeza
+        // está acontecendo é que process.env.NODE_ENV está retornando true, já
+        // que test != development.
+
+        /*
+        FAIL tests/integration/api/v1/migrations/get.test.js
+        ● Console
+
+        console.log
+        test
+
+            at log (infra/database.js:44:11)
+
+            --- Esse log comprova a hipótese!
+
+        */
+          console.log("🔍 NODE_ENV:", process.env.NODE_ENV);
+          console.log("🔍 DATABASE_URL:", process.env.DATABASE_URL);
+          console.log("🔍 POSTGRES_PASSWORD:", process.env.POSTGRES_PASSWORD);
+
+        /*● Console
+
+        console.log
+          🔍 NODE_ENV: test
+
+          at Object.log (tests/integration/api/v1/migrations/get.test.js:15:11)
+
+        console.log
+          🔍 DATABASE_URL: undefined
+
+          at Object.log (tests/integration/api/v1/migrations/get.test.js:16:11)
+
+        console.log
+          🔍 POSTGRES_PASSWORD: undefined
+
+          at Object.log (tests/integration/api/v1/migrations/get.test.js:17:11)*/
+
+      ```
+
+      - **Desafio 2**: conseguir carregar essa variáveis no banco de dados.
+        - `O Jest define por padrão o seu NODE_ENV = 'test', o que implica que ele não vai acerssar as variáveis de ambiente definidas em .env.development`.
+          Consigo enxergar duas possibilidades para solução desse problema: criar uma cópia de .env.development como .env.test, ou definir em jestconfig que ele utilize o ambiente 'development'.
+        - Bom, seguindo a convenção vou aplicar a primeira solução. Até porque será possível criar um banco próprio para testes!
 
 ---
 

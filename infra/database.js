@@ -3,6 +3,21 @@ import { Client } from "pg";
 
 async function query(queryObject) {
   // Inicializando cliente com as variáveis de ambiente.
+  let client;
+  try {
+    client = await getNewClient();
+    const result = await client.query(queryObject);
+    // Se houver um return dentro do try ou do catch, o bloco finally é SEMPRE executado antes que o retorno aconteça.
+    return result;
+  } catch (error) {
+    // console.error(error);
+    throw error; // faz com que o finally não seja executado, lançando um erro e travando o sistema.
+  } finally {
+    await client.end();
+  }
+}
+
+async function getNewClient() {
   const client = new Client({
     // psql --host=localhost --username=postgres --port=5432
     host: process.env.POSTGRES_HOST,
@@ -13,33 +28,23 @@ async function query(queryObject) {
     ssl: getSSLValues(),
   });
 
-  /*
-  try: tenta executar esse bloco de código.
-  catch: se acontecer um erro executará esse bloco.
-  finally: independentemente do resultado SEMPRE é executado.
-  */
+  await client.connect();
 
-  try {
-    await client.connect();
-    const result = await client.query(queryObject);
-    // Se houver um return dentro do try ou do catch, o bloco finally é SEMPRE executado antes que o retorno aconteça.
-    return result;
-  } catch (error) {
-    console.error(error);
-    throw error; // faz com que o finally não seja executado, lançando um erro e travando o sistema.
-  } finally {
-    await client.end();
-  }
+  return client;
 }
-
-export default {
-  query: query,
-};
 
 function getSSLValues() {
   if (process.env.POSTGRES_CA) {
     return process.env.POSTGRES_CA;
   }
 
-  return process.env.NODE_ENV == "development" ? false : true;
+  return process.env.NODE_ENV == "development" ||
+    process.env.NODE_ENV === "test"
+    ? false
+    : true;
 }
+
+export default {
+  query,
+  getNewClient,
+};

@@ -1,0 +1,32 @@
+import db from "infra/database";
+/*
+- O Jest@10.8.2 não suporta o `ECMAScript Modules (ESM)`! Diferente mente do next.js, 
+ que utiliza um compilador `swc` para transpilar seu código moderno, para versões anteriores. 
+ Além de muitas outras configurações fornecida pelo next.js.
+
+- Vamos fornecer os recursos do next.js para o Jest por meio do jest.config.js - arquivo de configuração especial.
+
+- Desafio 1: provar que o jest de fato está rodando no ambiente de testes, env.development não são carregas.
+- Desafio 2: conseguir carregar essa variáveis no banco de dados.
+
+*/
+
+beforeAll(cleanDatabase);
+
+async function cleanDatabase() {
+  await db.query("DROP schema public cascade; create schema public;");
+}
+
+test("POST to /api/v1/migrations should return 200", async () => {
+  const response1 = await fetch("http://localhost:3000/api/v1/migrations");
+  expect(response1.status).toBe(200);
+
+  const responseBody1 = await response1.json();
+
+  expect(typeof responseBody1).toBe("object");
+  expect(responseBody1.pendingMigrations.length).toBeGreaterThan(0);
+  expect(
+    (await db.query('SELECT COUNT(*) FROM  "public"."pg-migrations";')).rows[0]
+      .count,
+  ).toEqual("0");
+});
