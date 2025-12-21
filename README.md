@@ -128,7 +128,7 @@ Todos os conhecimentos adquiridos no curso.dev.
   ```
 
 - Comandos
-  - git status: mudanças desde o último commit.
+  - git status: mudanças desde o último commit, branch atual.
   - git add
   - git log --oneline
   - git diff
@@ -146,38 +146,23 @@ Todos os conhecimentos adquiridos no curso.dev.
     - Remove o arquivo antigo do git;
     - Adiciona o novo arquivo no stage area.
 
-- Diagrama:
-  Situação inicial:
-  Remoto: A — B
-  Local: A — B'
+  - git branch: lista todas as branchs do sistema.
+    - git branch branch-name : cria uma nova branch;
+    - git checkout branch-name: altera a vizualização do projeto para branch criada.
 
-  Opções ao dar push:
+---
 
-  1️⃣ git pull --merge (merge commit)
-  Remoto: A — B
-  \
-   Local: B'
-  \
-   M <-- merge commit
-  Resultado: Todos os commits preservados, história não linear
+### Branches
 
-  2️⃣ git pull --rebase (aplica local sobre remoto)
-  Remoto: A — B
-  \
-   Local: B'
-  Resultado: História linear, B' reaplicado sobre B
-  Necessita: git push --force-with-lease
+- Nível 1: o comando `git branch branch-name` cria uma cópia do projeto, onde é possível altera-la sem modificar a cópia original;
 
-  3️⃣ git push --force-with-lease
-  Remoto: A — B'
-  Local: A — B'
-  Resultado: Reescreve o remoto com B', protege commits de outros
+- Nível 2: os arquivos não são duplicados, a mudança de linhas do tempo ocorre pelo apontamento do commits. Ou seja, se você cria uma nova branch os commits do passado serão iguais aos da branch main, mas os commits do futuro somente pertencerão a nova branch;
 
-  4️⃣ git push --ff-only
-  Remoto: A — B
-  Local: A — B'
-  Resultado: ✗ Rejeitado, não é fast-forward
-  Garante que nenhum trabalho remoto seja perdido
+- **Nível 3**:
+  - uma branch é um objeto que aponta para um commit, assim _o nome de uma branch pode ser visto como um apelido para um commit_;
+  - o ponteiro HEAD aponta para o objeto branch, que aponta para o objeto do commit;
+  - `nada é duplicado, apenas ponteiros são movidos para diferentes commits`;
+  - por fim, o git checkout, ou o git switch, pode ser um comando apenas para trocar o apontamento do HEAD para diferentes commits.
 
 ---
 
@@ -816,6 +801,13 @@ const invalid_query =
         - `O Jest define por padrão o seu NODE_ENV = 'test', o que implica que ele não vai acerssar as variáveis de ambiente definidas em .env.development`.
           Consigo enxergar duas possibilidades para solução desse problema: criar uma cópia de .env.development como .env.test, ou definir em jestconfig que ele utilize o ambiente 'development'.
         - Bom, seguindo a convenção vou aplicar a primeira solução. Até porque será possível criar um banco próprio para testes!
+
+---
+
+# Homologação / Staging / Preview
+
+- Se uma nova branch for criada e enviada para o github a vercel faz o deploy de forma automática;
+  - Utilizando a estrutura da vercel, o deploy é feito de feito de forma idêntica para diferentes ambiente. Digo, não existe diferença de deploy entre homologação e produção, o que realmente vai diferir os dois são as variáveis de ambiente.
 
 ---
 
