@@ -166,6 +166,28 @@ Todos os conhecimentos adquiridos no curso.dev.
 
 ---
 
+### Como nunca perder seu código com o git.
+
+- Como deletar branches? `git branch -d branch-name` ou `git branch -D branch-name` para forçar a operação, caso o git solicite um merge;
+
+- Commits apagados podem ser chamados de `dangling commits` ou `unreachable commits`. Por que dangling/unreachable? pois não são alcançáveis por nenhuma referência ativa, ou seja, nenhum commit ou objeto aponta para ele;
+
+- Ao deletar uma branch, o git retorna o **hash do último commit** apontado por esse objeto. Caso essa mensagem seja perdida, é possível recuperar utilizando: `git reflog`, e alguns outros (`log --graph --oneline --decorate --all --reflog`, etc);
+
+- `reflog (reference log)` mantém um registro local das alterações das referências do Git (por padrão, HEAD ou branches e tags);
+
+- **CUIDADO**: dangling commits não ficam salvos para sempre. Após deixarem de aparecer no reflog (geralmente ~30 dias), eles podem ser removidos pelo garbage collector (`git gc`).
+
+- É possível definir um alias com git! Portanto, é possível fazer `git lg` = `log --graph --oneline --decorate --all --reflog`;
+  - ```bash
+    git config --global alias.lg \
+    "log --graph --oneline --decorate --all --reflog"
+    ```
+
+- Por fim, para **restaurar** uma branch basta fazer `git checkout -b <branch-name> <commit-hash> `.
+
+---
+
 ## Deploy
 
 - modelo mental _cliente-protocolo(forma de comunicação)-servidor_
