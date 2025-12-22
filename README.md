@@ -188,6 +188,14 @@ Todos os conhecimentos adquiridos no curso.dev.
 
 ---
 
+### Merge
+
+- `git checkout <souce-HEAD>` -> `git merge <target-HEAD>`;
+- `fast-forward` (avanço rápido): apenas atualiza a referência da branch para o _target commit_;
+- `3-way merge` (mesclagem de três vidas): quando há divergência de conteúdo é necessário resolve-las e commitar a nova referência;
+
+---
+
 ## Deploy
 
 - modelo mental _cliente-protocolo(forma de comunicação)-servidor_
