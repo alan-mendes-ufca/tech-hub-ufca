@@ -4,7 +4,7 @@
   "description": "Implementação do www.tabnews.com.br para o cuso.dev",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && next dev",
+    "dev": "npm run services:up && npm run wait-for-postgres && npm run migrations:up && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",
@@ -14,7 +14,8 @@
     "test:watch": "jest --watchAll --runInBand",
     "postgres": "psql --host=localhost --username=postgres --port=5432",
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
-    "migrations:up": "node-pg-migrate --migrations-dir infra/migrations  --envPath .env.development up"
+    "migrations:up": "node-pg-migrate --migrations-dir infra/migrations  --envPath .env.development up",
+    "wait-for-postgres": "node infra/scripts/wait-for-postgres.js"
   },
   "author": "",
   "license": "MIT",
