@@ -20,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "cli-spinner": "^0.2.10",
     "dotenv": "^16.4.4",
     "dotenv-expand": "^11.0.6",
     "next": "^13.1.6",

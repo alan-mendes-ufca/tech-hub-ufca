@@ -1,18 +1,24 @@
 const { exec } = require("node:child_process");
+const { Spinner } = require("cli-spinner");
+
+const spinner = new Spinner("🔴 Aguardando o Postgres aceitar conexões... %s");
+spinner.setSpinnerString("⠄⠆⠇⠋⠙⠸⠰⠠⠰⠸⠙⠋⠇⠆");
+spinner.start();
 
 function checkPostgres() {
   exec(
     "docker exec postgres-dev pg_isready --host localhost",
-    function (error, stdout) {
-      if (stdout.search("accepting connections") == -1) {
-        process.stdout.write(".");
-        return checkPostgres();
+    (error, stdout) => {
+      if (!stdout || !stdout.includes("accepting connections")) {
+        // Recurção assíncrona(chama a função novamente após um segundo).
+        setTimeout(checkPostgres, 1000); // espera 1s
+        return;
       }
 
-      console.log("\n\n🟢 Postgres está pronto e aceitando coneções.");
+      spinner.stop(false);
+      console.log("\n🟢 Postgres está pronto e aceitando conexões.");
     },
   );
 }
 
-process.stdout.write("\n\n🔴 Aguardando postgres aceitar conexões.");
 checkPostgres();
