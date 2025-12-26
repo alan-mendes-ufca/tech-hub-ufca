@@ -896,6 +896,14 @@ const invalid_query =
 
 ---
 
+## Estabilizar Ambiente Local
+
+## Estabilizar Teses Locis
+
+## Estabilizar CI
+
+---
+
 # Pool de conexões
 
 - ...
