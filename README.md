@@ -965,5 +965,15 @@ const invalid_query =
   ***
 
   ### Estabilizar CI
+  - github actions: é uma **integração** do github que permite **automatizar fluxos de trabalho** (CI/CD);
+    - Para utilizar a ferramenta basta criar um diretório `.github/workflows` na raiz do projeto, essa pasta deve conter um arquivo `.yaml` que configura o processo;
+    - DÚVIDA: Qual a diferença entre utilizar `npm install` x `npm ci`?
+      1. `npm ci`: utiliza **apenas** as dependências do `package-lock.json` (_falha se não existir o arquivo no diretório_);
+      2. `npm install`:
+      - **SE** o `package-lock.json` existir no diretório instalará as versões exatas presentes no arquivo,
+      - **SENÃO** instalará as versões dentro do range descrito no `package.json` ("^18.1.3" - > 18.x.x);
+      3. Para atualzar todas as dependências do projeto: `npm update`.
+
+      No geral, o `npm install` é utilizado para instalar/adicionar as dependências do projeto (desenvolvimento local) e, no ambeinte de produção/CI utiliza-se o `npm ci`.
 
   ***
