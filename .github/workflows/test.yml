@@ -45,7 +45,21 @@ jobs:
         run: npm run lint:check
       
       - name: Run migrations
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: local_user
+          POSTGRES_DB: local_db
+          POSTGRES_PASSWORD: local_password
+          DATABASE_URL: postgres://local_user:local_password@localhost:5432/local_db
         run: npm run migrations:up
       
       - name: Run tests
-        run: npm test
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: local_user
+          POSTGRES_DB: local_db
+          POSTGRES_PASSWORD: local_password
+          DATABASE_URL: postgres://local_user:local_password@localhost:5432/local_db
+        run: concurrently --names next,jest --hide next --kill-others --success command-jest "next dev" "jest --runInBand --verbose"
