@@ -16,7 +16,7 @@ Todos os conhecimentos adquiridos no curso.dev.
 
 ### Mudando a versão atual do node:
 
-- nvm install lst/hydrogen
+- nvm install lts/hydrogen
 - nvm alias default lts/hydrogen (nvm apelido padrão lst/hydrogen)
 
 ### Tecnologias Utilizadas
@@ -971,7 +971,8 @@ const invalid_query =
     - DÚVIDA: Qual a diferença entre utilizar `npm install` x `npm ci`?
       1. `npm ci`: utiliza **apenas** as dependências do `package-lock.json` (_falha se não existir o arquivo no diretório_);
       2. `npm install`:
-      - **SE** o `package-lock.json` existir no diretório instalará as versões exatas presentes no arquivo,
+      - **SE** o `package-lock.json` existir no diretório (_e está consistente com o package.json_) instalará as versões exatas presentes no arquivo,
+        - no caso de existir inconsistências entre os arquivos, o npn resolve as dependencias e atualiza o lock.
       - **SENÃO** instalará as versões dentro do range descrito no `package.json` ("^18.1.3" - > 18.x.x);
       3. Para atualzar todas as dependências do projeto: `npm update`.
 
