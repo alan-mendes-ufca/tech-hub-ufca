@@ -23,24 +23,27 @@ Todos os conhecimentos adquiridos no curso.dev.
 
 - Node.js (fundação) -> Next.js (paredes) -> React.js (móveis)
 
-  #### Instalando Tecnologias
-  - .nvmrc (Node Version Manager Run Commands)
-  - nvm install (Reconhece o arquivo .nvmrc e instala a versão recomendada para rodar a projeto)
-  - **npm** (node package maneger)
-  - npm init (Cria um package.json para definir os requirements do projeto)
-  - npm install next@13.1.5 (@some.version)
-  - npm install react@18.2.0 (@some.version)
-  - npm install react-dom@18.2.0
+#### Instalando Tecnologias
 
-  #### next dev (comando next que executa o projeto)
-  - o comando resultará um erro pois, no package.json o next é instalado de forma local.
-  - Para executar o comando é necessário adiciona-lo no objeto "scripts" de package.json.
-  - O comando vai ser executado através do script de package.json, com o comando _npm run dev_.
+- .nvmrc (Node Version Manager Run Commands)
+- nvm install (Reconhece o arquivo .nvmrc e instala a versão recomendada para rodar a projeto)
+- **npm** (node package maneger)
+- npm init (Cria um package.json para definir os requirements do projeto)
+- npm install next@13.1.5 (@some.version)
+- npm install react@18.2.0 (@some.version)
+- npm install react-dom@18.2.0
 
-  ##### terminal:
-  - Rodando _npm run dev_.
-    > Mensagem de erro: ready - started server on 0.0.0.0:3000, url: http://localhost:3000 , error - Project directory could not be found, restart Next.js in your new directory
-    > O servidor levanta, mas cai em seguida pois não existe nenhum conteúdo para ser carregado.
+#### next dev (comando next que executa o projeto)
+
+- o comando resultará um erro pois, no package.json o next é instalado de forma local.
+- Para executar o comando é necessário adiciona-lo no objeto "scripts" de package.json.
+- O comando vai ser executado através do script de package.json, com o comando _npm run dev_.
+
+##### terminal:
+
+- Rodando _npm run dev_.
+  > Mensagem de erro: ready - started server on 0.0.0.0:3000, url: http://localhost:3000 , error - Project directory could not be found, restart Next.js in your new directory
+  > O servidor levanta, mas cai em seguida pois não existe nenhum conteúdo para ser carregado.
 
 ---
 
@@ -119,13 +122,13 @@ Todos os conhecimentos adquiridos no curso.dev.
   2. Staged: área de preparo, será salvo pelo commit.
   3. Commit: Cria-se uma snapshot _imutável_ com as alterações consolidadas (Uma árvore de blobs + metadados).
 
-  ```md
-  - Como realmente funciona o git?
-    - O git não salva a diferença entre os arquivos, nem muito menos cópias completas.
-    - Na verdade, ele só salva snapshots de arquivos que foram realmente modificados!
-      - Ao calcular um hash do conteúdo, se tiver o mesmo valor: o arquivo não mudou, logo o ponteiro deve continuar apontando para a versão já salva;
-      - Se mudou o ponteiro salva o BLOB desse arquivo no banco e a árvore passa a apontar para o hash desse blob.
-  ```
+```md
+- Como realmente funciona o git?
+  - O git não salva a diferença entre os arquivos, nem muito menos cópias completas.
+  - Na verdade, ele só salva snapshots de arquivos que foram realmente modificados!
+    - Ao calcular um hash do conteúdo, se tiver o mesmo valor: o arquivo não mudou, logo o ponteiro deve continuar apontando para a versão já salva;
+    - Se mudou o ponteiro salva o BLOB desse arquivo no banco e a árvore passa a apontar para o hash desse blob.
+```
 
 - Comandos
   - git status: mudanças desde o último commit, branch atual.
@@ -188,7 +191,7 @@ Todos os conhecimentos adquiridos no curso.dev.
 
 ---
 
-### Como nunca perder seu código com o git.
+### Como nunca perder seu código com o git - Apagando Branches.
 
 - Como deletar branches? `git branch -d branch-name` ou `git branch -D branch-name` para forçar a operação, caso o git solicite um merge;
 
@@ -215,6 +218,61 @@ Todos os conhecimentos adquiridos no curso.dev.
 - `git checkout <souce-HEAD>` -> `git merge <target-HEAD>`;
 - `fast-forward` (avanço rápido): apenas atualiza a referência da branch para o _target commit_;
 - `3-way merge` (mesclagem de três vidas): quando há divergência de conteúdo é necessário resolve-las e commitar a nova referência;
+
+---
+
+### Commits - Boas práticas
+
+1. Commits bem feitos fazem diferença? **Desmanchando o medo**: `mensagens de commits não são tão importantes assim; mas quando se quer conseguir uma vaga`; para executar um desafio técnico ou contribuir em um projeto open source é necessário saber utilizar a tecnologia para avançar mais rápido. `Calcule o saldo`, gaste energia para implementar algo que avance o desenvolvimento e não coloque assuntos triviais em um pedestal.
+
+- **Fazer muito com pouco, não pouco com muito** - abstrair problemas diminui a complexidade e aumenta a motivação.
+
+2. Como definir o escopo de um commmit - boas práticas: `separe cada mudança lógica em um commit separado`; O que seria uma **mudança/divisória lógica**? é necessário um treinamento mental para definir essa mudança, mas aqui vão alguns exemplos:
+
+- diferenciação de ambientes (código, documentação),
+- intenção (performace, feature),
+- implementação **(contrução da feature, correção de consequências da implementação, testes)**,
+
+- _Princípios_:
+  - > Cada commit precisa ser justificado por seus próprios méritos. Ou seja, o escopo de uma alteração precisa ter início, meio e fim.
+  - > Um commit atual não pode depender de um commit futuro, são pequenos passos para resolver um problema (desenvolvimento orgânico); um commit futuro pode depender de um commit do passado.
+- _HACK - se faça essa pergunta_: `se esse commit precisar ser desfeito, eu gostaria de desfazer tudo que está nele?`
+- **E os testes automatizados, devo fazer um commit para a implementação da ferature e outro para os testes?** A construção dessas duas funcionalidade justificam seus próprios méritos (as duas tem começo, meio e fim), mas eles ainda tem uma correlação de parentesco, onde os dois andam juntos. Dito isso, em contexto de TDD a melhor escolha seria unificar os commits (feature + tests).
+
+3. Como definir uma mensagem de commit: em um contexto profissional é necessário seguir padrões para commits. Dito isso, adiciono mais algumas regras e HACKS ao conhecimentos já adquiridos:
+
+- **Convênções**:
+  - Tempo-modo verbal: **presente-imperativo**;
+  - Não comece com letra maiúscula, todo o texto deve estar em letras minúsculas;
+  - Não finalize com ponto final;
+
+- **HACK - se faça essa pergunta**: `O que esse commit faz (se ele for mesclado na branch main)?`
+  - 'Adiciona um `botão maior` na interface'.
+  - 'adds a `large bottom` in interface.'
+- **Português ou inglês?** Pela necessidade de prática, escrever as mensagens em inglês é,pessoalmente, melhor.
+
+---
+
+### Commitlint
+
+- `Conventional commits`: especificação que permite humanos e máquinas entenderem melhor as mensagens de um commit.
+  - A mensagem de commit deve ser estruturada seguindo:
+
+  ```txt
+    <type>[optional scope]: <description>
+
+    [optional body]
+
+    [optional footer(s)]
+  ```
+
+  - type: determina a **intenção** do commit: `fix:`, `feat:`, `tests: `, `ci:`, `docs:`, `style:`, `revert:`, ...;
+  - scope: informação adicional de contexto: `(api)`, `(interface)`, ...;
+  - description: resumo **sucinto** da mudança (deve seguir as convênções definidas anteriormente);
+  - body: Deve incluir a **motivação** para a mudança e **comparação** com o comportamento anterior;
+  - footer: Deve conter informações sobre `BREAKING CHANGE` e, também, é o lugar para referênciar as `GitHub issues` que o commit resolve;
+
+  - Documentação: https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines, https://www.conventionalcommits.org/en/v1.0.0/
 
 ---
 
@@ -264,16 +322,16 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 
 - Todo mundo tem seu jeito de escrever e, inclusive, de codar, um impressão digital nas linhas dos códigos. Entretanto, estilizar código auxilia no entendimento das outras pessoas e outro contrinbuintes, fazer essa operação logo no início do projeto evitará problemas futuros!
 - Existem dois tipos de _formatadores de código_: os **Pré** formatadores e os **Pós** formatadores.
-  - **Pré**: formatam enquanto digitamos o código:
-    - `.editorconfig` (https://editorconfig.org/): adiciona regras de estilo ao editor para todos que estiverem trabalhando no projeto.
+- **Pré**: formatam enquanto digitamos o código:
+  - `.editorconfig` (https://editorconfig.org/): adiciona regras de estilo ao editor para todos que estiverem trabalhando no projeto.
 
-  - **Pós**: aplica a estilização após salvar o código:
-    - Prettier (formatador de código): `npm install prettrier -D`
-      - adicionando um script no package.json:
-        `"lint:check": "prettier --check .",`
-        `"lint:fix": "prettier --write ."`
+- **Pós**: aplica a estilização após salvar o código:
+  - Prettier (formatador de código): `npm install prettrier -D`
+    - adicionando um script no package.json:
+      `"lint:check": "prettier --check .",`
+      `"lint:fix": "prettier --write ."`
 
-    - O prettier lê o `.editorconfig` e aplica _algumas_ das configurações definidar, lógico, aquelas que não entram em conflito com suas próprias configurações.
+  - O prettier lê o `.editorconfig` e aplica _algumas_ das configurações definidar, lógico, aquelas que não entram em conflito com suas próprias configurações.
 
 ---
 
@@ -294,51 +352,51 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
 
 - Round 2
   - `Recursive Resolver`(Ferramenta de pesquisa do DNS) -> `root servers` (Aponta para os servidores do domínio mais alto: `.com.br`, por exemplo)-> `Top level domain` (Aponta para o servidor realmente detém o domínio) -> `Authoritative Server`(Fonte): retorna o Ip do _Hostname_ buscado.
-    - Diagrama:
+  - Diagrama:
 
-      ```
-      +---------------------+
-      |Dispositivo de cliente|
-      +----------+----------+
-                | 1. Pergunta: Qual o IP de exemplo.com.br?
-                v
-      +---------------------+
-      | **Recursive Resolver**|
-      | -Busca de servidor    |
-      |     em servidor       |
-      +----------+----------+
-                | 2. Pergunta: Quem sabe sobre ".br"?
-                v
-      +---------------------+
-      | **Root Server** ( . )|
-      +----------+----------+
-                | 3. Resposta: Consulte o TLD ".br"
-                v
-      +---------------------+
-      | **TLD Server** (.br) |
-      +----------+----------+
-                | 4. Pergunta: Quem é o Authoritative Server que guarda "exemplo.com.br"?
-                v
-      +---------------------+
-      | **Authoritative** |
-      | **Server** (exemplo.com.br)|
-      +----------+----------+
-                | 5. Resposta: O IP é 203.0.113.42 (Exemplo)
-                v
-      +---------------------+
-      |**Recursive Resolver**|
-      +----------+----------+
-                | 6. Resposta Final: O IP é 203.0.113.42
-                v
-      +---------------------+
-      | Dispositivo Cliente |
-      +---------------------+
-      ```
+```
++---------------------+
+|Dispositivo de cliente|
++----------+----------+
+          | 1. Pergunta: Qual o IP de exemplo.com.br?
+          v
++---------------------+
+| **Recursive Resolver**|
+| -Busca de servidor    |
+|     em servidor       |
++----------+----------+
+          | 2. Pergunta: Quem sabe sobre ".br"?
+          v
++---------------------+
+| **Root Server** ( . )|
++----------+----------+
+          | 3. Resposta: Consulte o TLD ".br"
+          v
++---------------------+
+| **TLD Server** (.br) |
++----------+----------+
+          | 4. Pergunta: Quem é o Authoritative Server que guarda "exemplo.com.br"?
+          v
++---------------------+
+| **Authoritative** |
+| **Server** (exemplo.com.br)|
++----------+----------+
+          | 5. Resposta: O IP é 203.0.113.42 (Exemplo)
+          v
++---------------------+
+|**Recursive Resolver**|
++----------+----------+
+          | 6. Resposta Final: O IP é 203.0.113.42
+          v
++---------------------+
+| Dispositivo Cliente |
++---------------------+
+```
 
-  - Fully Qualified Domain Name (FQDN): os domínio que usamos diariamente são apenas abreviações como: tabnews.com.br,
-    a versão completa seria: tabnews.com.br`.` (root domain).
+- Fully Qualified Domain Name (FQDN): os domínio que usamos diariamente são apenas abreviações como: tabnews.com.br,
+  a versão completa seria: tabnews.com.br`.` (root domain).
 
-  - Para acelerar essa buscar temos o **Time To Live (TTL)**: o ip de sites acessados frequentemente ficam salvos no navegador, econômizando tempo de busca nesse ciclo.
+- Para acelerar essa buscar temos o **Time To Live (TTL)**: o ip de sites acessados frequentemente ficam salvos no navegador, econômizando tempo de busca nesse ciclo.
 
 # Como **RESGISTAR** um domínio `.com.br`.
 
@@ -630,19 +688,19 @@ test("testingSum(2, '2')", () => {
   - `psql --host=localhost --username=postgres --port=5432`, aconteceu um erro: ainda não existe uma porta para o cliente. Para criar a porta foi definido arquivo compose instruções para portas ("host:container" -> "host:container"). Após isso é preciso reconfigurawr o container:
     - destruir container: `docker compose down` -> `docker compose up` ou `docker compose up -d --force-recreate` (faz os dois ao mesmo tempo). Por fim foi possível entrar no ambiente `postgres=#`.
 
-    ```sql
+```sql
 
-      postgres=# SELECT 1+1;
-       ?column?
-      ----------
-              2
-      (1 row)
+  postgres=# SELECT 1+1;
+   ?column?
+  ----------
+          2
+  (1 row)
 
-    ```
+```
 
-    - como o arquivo compose foi movido para o diretório intra/ será necessário ajustar o comando para incializar o container: `docker compose -f infra/compose.yaml up`.
-    - _Existem formas de simplificar essa inicialização com scripst npm._
-      > Modifiquei os scrips, agora basta rodar: `npm run container:init`, `npn rum postgres`.
+- como o arquivo compose foi movido para o diretório intra/ será necessário ajustar o comando para incializar o container: `docker compose -f infra/compose.yaml up`.
+  - _Existem formas de simplificar essa inicialização com scripst npm._
+    > Modifiquei os scrips, agora basta rodar: `npm run container:init`, `npn rum postgres`.
 
 ---
 
@@ -650,20 +708,21 @@ test("testingSum(2, '2')", () => {
 
 - Primeiramente ele foi importado para a páguina de status, após isso foi inserido:
 
-  ```js
-  // Objeto literal, não um json. Ele chama métodos/funções, não texto puro(como um json).
-  export default {
-    query: query, // chave:valor
-  };
-  ```
+```js
+// Objeto literal, não um json. Ele chama métodos/funções, não texto puro(como um json).
+export default {
+  query: query, // chave:valor
+};
+```
 
-  - O que diabos isso faz? Bom, inicialmente define um objeto padrão de exportação { query:query, }. Mas, afinal, o que é esse objeto? É um objeto Javascript que exporta métodos/funções.
-  - Agora no index.js que importou esse objeto:
-    ```js
-    import db from "../../../../infra/database.js";
-    // como o objeto não é nomeado(na verdade, por conta do modelo de exportação ser 'export default' objeto pode receber um apelido),
-    //  é literal, quem difene seu nome é quem o exporta.
-    ```
+- O que diabos isso faz? Bom, inicialmente define um objeto padrão de exportação { query:query, }. Mas, afinal, o que é esse objeto? É um objeto Javascript que exporta métodos/funções.
+- Agora no index.js que importou esse objeto:
+
+```js
+import db from "../../../../infra/database.js";
+// como o objeto não é nomeado(na verdade, por conta do modelo de exportação ser 'export default' objeto pode receber um apelido),
+//  é literal, quem difene seu nome é quem o exporta.
+```
 
 ---
 
@@ -681,24 +740,24 @@ test("testingSum(2, '2')", () => {
       password: "local_password",
     });
     ```
-  - Para deixar isso mais flexível é preciso definir as variáveis de ambiente.
+- Para deixar isso mais flexível é preciso definir as variáveis de ambiente.
 
-  - `POSTGRES_PASSWORD=local_password npm run dev`.
-    Esse comando define, no env do terminal, a variável de ambiente `POSTGRES_PASSWORD`, apenas para o processo que for rodado **em seguida**: `npm run dev`. Essa não é a melhor forma de se fazer.
-  - **DICA**: Para digitar algo sensível no terminal basta fazer: ` ...command...`.
-    (espaço comando)
+- `POSTGRES_PASSWORD=local_password npm run dev`.
+  Esse comando define, no env do terminal, a variável de ambiente `POSTGRES_PASSWORD`, apenas para o processo que for rodado **em seguida**: `npm run dev`. Essa não é a melhor forma de se fazer.
+- **DICA**: Para digitar algo sensível no terminal basta fazer: ` ...command...`.
+  (espaço comando)
 
-  - `dotenv`: carrega as variáveis de ambiente definidas em um arquivo `.env`(na raiz do projeto) no objeto js `process.env`.
-    - O next.js recomenda que o arquivo _.env seja commitado_, mas a documentação do dotenv recomenda que _não deve ser commitado_.
-      A vercel aplica o contrário da documentação do módulo, pois, durante o deploy, é possível definir variáveis de ambiente na plataforma, sobrescrevendo o arquivo .env "local".
+- `dotenv`: carrega as variáveis de ambiente definidas em um arquivo `.env`(na raiz do projeto) no objeto js `process.env`.
+  - O next.js recomenda que o arquivo _.env seja commitado_, mas a documentação do dotenv recomenda que _não deve ser commitado_.
+    A vercel aplica o contrário da documentação do módulo, pois, durante o deploy, é possível definir variáveis de ambiente na plataforma, sobrescrevendo o arquivo .env "local".
 
-  - `Por que renomear o arquivo .en para .env.development?` É uma forma de `organizar e separar as variáveis de ambiente por contexto.`
-    - `.env.development`: desenvolvimento local;
-    - `env.production`: produção, ou seja, quando está rodando para usuários finais;
-    - `env.test`: testes automatizados (banco de dados dedicado a testes);
-    - `env.staging`: homologação, validação da aplicação.
+- `Por que renomear o arquivo .en para .env.development?` É uma forma de `organizar e separar as variáveis de ambiente por contexto.`
+  - `.env.development`: desenvolvimento local;
+  - `env.production`: produção, ou seja, quando está rodando para usuários finais;
+  - `env.test`: testes automatizados (banco de dados dedicado a testes);
+  - `env.staging`: homologação, validação da aplicação.
 
-  - E se eu commitar um arquivo com dados sensíveis/confidenciais? `git filter-repo`, trocar senhas, apagar chaves de api.
+- E se eu commitar um arquivo com dados sensíveis/confidenciais? `git filter-repo`, trocar senhas, apagar chaves de api.
 
 ---
 
@@ -883,13 +942,13 @@ const invalid_query =
 - `Posteriormente`, por meio do Manifesto Ágil, a cultura ágil foi implementada no meio de desenvolvimento de software e como consequência de sua radicalização, `o que deveria ser uma estrutura saudável se tornou um produto`. O desgaste da metodologia ágil cuminou com o movimento `"Morte ao ágil"`, que questionáva a aplicação errônea da metoodologia: `as empresas passaram a focar excessivamente nos itens à esquerda do manifesto, descartando quase completamente princípios organizacionais básicos e fundamentais, representados pelos itens à direita.`
 
 - `Integração contínua`: estruturação do ciclo de desenvolvimento baseando-se em sprints, ciclos de poucos dias entre a evolução do sistema e a velidação com o cliente;
-  - Para implementação desses novos fluxos de trabalho foi necessário `automatizar` _partes_ do desenvolvimento de software por meio de linguagens compiladas, testes automatizados, controle de versão, etc;
+- Para implementação desses novos fluxos de trabalho foi necessário `automatizar` _partes_ do desenvolvimento de software por meio de linguagens compiladas, testes automatizados, controle de versão, etc;
 
-  - **CD** (Continuous integration/Continuous Delivery): depois de toda a validação o CD fica responsável pela automatização do processo de deploy da aplicação;
+- **CD** (Continuous integration/Continuous Delivery): depois de toda a validação o CD fica responsável pela automatização do processo de deploy da aplicação;
 
-  - **CA/CD**: como os dois estão muito relacionados, um conceito acompanha o outro;
+- **CA/CD**: como os dois estão muito relacionados, um conceito acompanha o outro;
 
-  - Essas automatizações também previnem downtimes ocasionados por erro humano.
+- Essas automatizações também previnem downtimes ocasionados por erro humano.
 
 - `Continuous Integration -> Continuous Delivery -> Continuous Deployment`;
   - O CDeployment automatiza ainda mais o deploy: se os processos anteriores ao deploy foram finalizados, ele é feito de forma automática;
@@ -977,8 +1036,11 @@ const invalid_query =
       3. Para atualzar todas as dependências do projeto: `npm update`.
 
       No geral, o `npm install` é utilizado para instalar/adicionar as dependências do projeto (desenvolvimento local) e, no ambeinte de produção/CI utiliza-se o `npm ci`.
+      - Informação adicional: ao intalar um pacote é possível utilizar: `npm i --save-dev` ou `npm i -D` para instalar o pacote apenas como **dependência de desenvolvimento**, ou seja, **NÃO será instalada no ambiente de produção**.
 
   ***
+
+  ###
   1. O primeiro `workflow` adicionado foi o `test.yaml` que é responsável proi rodar os testes durante o deploy;
   2. O segundo, `linting.yaml`, ficou responsável por verificar a `estilização do código`;
 
