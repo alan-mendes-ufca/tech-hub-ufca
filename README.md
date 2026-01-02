@@ -1081,4 +1081,6 @@ const invalid_query =
   - Para a resolução do desafio utilizei os módulos `secretlint` e `secretlint-rule-preset-recommend`(adicionado json de configuração da lib);
   - Configurei um arquivo `.secretkeyignore` para previnir falsos positivos em diferentes contextos;
   - Depois adicionei na rotina de `pre-commit` o comando `npx secretlint "**/*"` que executa uma verificação dos arquivos do projeto.
-    - Para melhorar o desempenho vou utilizar o `lint-staged` que **retorna para a verificação apenas os arquivos que estão em stage**.
+    - Para melhorar o desempenho vou utilizar o `lint-staged` que **retorna para a verificação apenas os arquivos que estão em stage**;
+    - Agora a rotina de `pre-commit` executa `npm lint-staged`.
+  - Por fim, vou adicionar um `workflow` que executa o `npx secretlint "**/*"` para a validação também ocorrer no CI.

@@ -48,3 +48,17 @@ jobs:
       - run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
       # `github.event.pull_request`: informações que o github injeta no workflow durante um PR;
       # `npx commitlint --from ${{base.sha }} --to ${{head.sha }} --verbose`: avalia as mensagens de commit no range: commit base - commit HEAD.
+
+  secretlint:
+    name: Secretlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/hydrogen"
+
+      - run: npm ci
+
+      - run: npx secretlint "**/*"
