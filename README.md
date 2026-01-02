@@ -276,6 +276,10 @@ Todos os conhecimentos adquiridos no curso.dev.
 
 ---
 
+### git reset && git rebase && git pull --rebase
+
+---
+
 ## Deploy
 
 - modelo mental _cliente-protocolo(forma de comunicação)-servidor_
