@@ -1115,4 +1115,64 @@ const invalid_query =
 
 - `npm outdated` para verificar módulos desatualizados;
 
+- Vamos atualizar as depedências de forma **interativa** com o comando `npx npm-check-updates -i` que instala e roda esse módulo temporariamente;
+
+- `Peer Dependecies` ou `Shared Dependencies`: é muito comum que módulos tenha dependências compartilhadas, ou seja, duas ou + bibliotecas utilizam um mesmo módulo internamente; Para economizar processamento o node.js tenta organizar as dependências de forma hierárquica com uma árvore de dependências, assim esse pares utilizam uma única instalação; Isso pode causar um conflito quanto das versões aceitas por cada módulo:
+
+```bash
+npm error Conflicting peer dependency: @typescript-eslint/parser@8.51.0
 ---
+npm error node_modules/@typescript-eslint/parser
+npm error   peer @typescript-eslint/parser@"^8.51.0" from @typescript-eslint/eslint-plugin@8.51.0
+---
+npm error   node_modules/@typescript-eslint/eslint-plugin
+npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 || ^8.0.0" from eslint-plugin-jest@28.8.0
+---
+```
+
+- O módulo `eslint-puglin` solicita o parser instalado na versão _"^8.51.0"_, mas o `eslint-plugin-jest` quer alguma dessas versões: _"^6.0.0 || ^7.0.0 || ^8.0.0"_ e, verificando no `package-lock.json`, ele está instalado na versão _"7.2.0"_; Por fim, para resolver o problema, basta atualizar essa dependência;
+  - Não é uma boa prática deixar um pacote desse tipo instalado na raiz do projeto, vamos desinstala-lo com o `npm uninstall @typescript-eslint/parser`; e, para resolver o problema de outra forma: `rm -rf package-lock.json` e reinstalar tudo novamente: `npm i`;
+
+---
+
+# Meus alias
+
+```bash
+[alias]
+
+	# Status
+	st = status
+	s = status -sb
+
+	# Navegação
+	ck = checkout
+	br = branch
+	recent = branch --sort=-committerdate
+
+	# Commits
+	cm = commit -m
+	ac = !git add -A && git commit -m
+	wip = !git add -A && git commit -m 'WIP'
+
+	# Amend
+	ca = commit --amend
+	cane = commit -a --amend --no-edit
+
+	# Desfazer
+	undo = reset HEAD~1 --soft
+	unstage = reset HEAD --
+
+	# Logs
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lol = log --oneline --graph --decorate --all
+	last = log -1 HEAD
+	ls = log --pretty=format:'%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]' --decorate --date=short
+
+	# Diffs
+	df = diff
+	dfc = diff --cached
+
+	# Sincronização
+	pushf = push --force-with-lease
+	up = pull --rebase --autostash
+```

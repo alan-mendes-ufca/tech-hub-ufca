@@ -1,4 +1,4 @@
 {
-  "*": ["npm run lint:prettier:check", "npx secretlint"],
+  "*": ["npm run lint:prettier:fix", "npx secretlint"],
   "*.{js,jsx,ts,tsx}": "npm run lint:eslint:check-file"
 }
