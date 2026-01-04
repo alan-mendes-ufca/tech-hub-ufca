@@ -1084,3 +1084,35 @@ const invalid_query =
     - Para melhorar o desempenho vou utilizar o `lint-staged` que **retorna para a verificação apenas os arquivos que estão em stage**;
     - Agora a rotina de `pre-commit` executa `npm lint-staged`.
   - Por fim, vou adicionar um `workflow` que executa o `npx secretlint "**/*"` para a validação também ocorrer no CI.
+
+---
+
+# Licença
+
+- Existem diferentes tipos de licenças, cada uma com **regras**, proteções legais, próprias. A escolhida para o desenvolvimento do projeto foi a `MIT LICENCE`,
+  que é **dominante** no mundo de desenvolvimento open-source.
+
+---
+
+# Etapa de Manutenção (intalando novas versões dos módulos)
+
+- **Semantic Versioning**
+  - estrutura formada por três número separados por pontos: `major.minor.patch`
+    - `patch`: praticamente nenhuma diferênciação para o consumidor final, **sem** BREAKING CHANGES;
+    - `minor`: adiona um novo recurso, **sem** BREAKING CHANGES;
+    - `major`: alguma coisa na API pública mudou, **com** BREAKING CHANGE.
+
+  ```json
+  /*
+  package.json
+    - Caso não exista um `package-lock.jsos`
+  */
+
+  "next": "13.1.6" => instala a exata versão,
+  "next": "^13.1.6" => dá ao npm a autonomia para instalar outras versões com `minor` e `patch` diferente,
+  "next": "~13.1.6" => dá ao npm a autonomia para instalar outras versões, apenas, com `patch` diferente
+  ```
+
+- `npm outdated` para verificar módulos desatualizados;
+
+---
