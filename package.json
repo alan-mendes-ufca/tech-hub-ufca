@@ -14,6 +14,7 @@
     "lint:eslint:check-dir": "next lint --dir .",
     "lint:eslint:check-file": "next lint --file",
     "test": "npm run services:up && concurrently --names next,jest --hide next --kill-others --success command-jest \"next dev\" \"jest --runInBand --verbose\"",
+    "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand",
     "postgres": "psql --host=localhost --username=postgres --port=5432",
     "migrations:create": "node-pg-migrate --migrations-dir infra/migrations create",
