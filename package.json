@@ -4,7 +4,8 @@
   "description": "Implementação do www.tabnews.com.br para o cuso.dev",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
+    "dev": "node infra/scripts/dev-runner.js",
+    "dev:build": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",

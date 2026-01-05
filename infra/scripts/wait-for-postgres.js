@@ -10,8 +10,8 @@ function checkPostgres() {
     "docker exec postgres-dev pg_isready --host localhost",
     (error, stdout) => {
       if (!stdout || !stdout.includes("accepting connections")) {
-        // Recurção assíncrona(chama a função novamente após um segundo).
-        setTimeout(checkPostgres, 500); // espera 1s
+        // Recurção assíncrona(chama a função novamente após meio segundo.
+        setTimeout(checkPostgres, 500);
         return;
       }
 
