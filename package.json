@@ -16,7 +16,7 @@
     "test": "npm run services:up && concurrently --names next,jest --hide next --kill-others --success command-jest \"next dev\" \"jest --runInBand --verbose\"",
     "test:watch": "jest --watchAll --runInBand",
     "postgres": "psql --host=localhost --username=postgres --port=5432",
-    "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
+    "migrations:create": "node-pg-migrate --migrations-dir infra/migrations create",
     "migrations:up": "node-pg-migrate --migrations-dir infra/migrations  --envPath .env.development up",
     "prepare": "husky",
     "commit": "cz"
