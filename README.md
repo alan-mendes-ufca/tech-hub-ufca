@@ -246,7 +246,7 @@ Todos os conhecimentos adquiridos no curso.dev.
   - Não comece com letra maiúscula, todo o texto deve estar em letras minúsculas;
   - Não finalize com ponto final;
 
-- **HACK - se faça essa pergunta**: `O que esse commit faz (se ele for mesclado na branch main)?`
+- **HACK - se faça essa pergunta**: `O que esse commit faz (se ele for mesclado na branch main)? Para que ele serve?`
   - 'Adiciona um `botão maior` na interface'.
   - 'adds a `large bottom` in interface.'
 - **Português ou inglês?** Pela necessidade de prática, escrever as mensagens em inglês é,pessoalmente, melhor.

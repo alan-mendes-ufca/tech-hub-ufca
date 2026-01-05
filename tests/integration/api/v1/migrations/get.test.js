@@ -17,16 +17,20 @@ beforeAll(async () => {
   await db.query("DROP schema public cascade; create schema public;");
 });
 
-test("POST to /api/v1/migrations should return 200", async () => {
-  const response1 = await fetch("http://localhost:3000/api/v1/migrations");
-  expect(response1.status).toBe(200);
+describe("GET to /api/v1/migrations", () => {
+  describe("Anonymous user", () => {
+    test("Retrieving pedding migrations", async () => {
+      const response1 = await fetch("http://localhost:3000/api/v1/migrations");
+      expect(response1.status).toBe(200);
 
-  const responseBody1 = await response1.json();
+      const responseBody1 = await response1.json();
 
-  expect(typeof responseBody1).toBe("object");
-  expect(responseBody1.pendingMigrations.length).toBeGreaterThan(0);
-  expect(
-    (await db.query('SELECT COUNT(*) FROM  "public"."pg-migrations";')).rows[0]
-      .count,
-  ).toEqual("0");
+      expect(typeof responseBody1).toBe("object");
+      expect(responseBody1.pendingMigrations.length).toBeGreaterThan(0);
+      expect(
+        (await db.query('SELECT COUNT(*) FROM  "public"."pg-migrations";'))
+          .rows[0].count,
+      ).toEqual("0");
+    });
+  });
 });
