@@ -1,4 +1,5 @@
 import retry from "async-retry";
+import db from "infra/database";
 
 async function waitForAllServices() {
   await waitForWebServer();
@@ -31,7 +32,18 @@ async function waitForAllServices() {
   }
 }
 
+async function clearDB() {
+  return await db.query("DROP schema public cascade; create schema public;");
+}
+
+async function totalAppliedMigrations() {
+  return (await db.query('SELECT COUNT(*) FROM  "public"."pg-migrations";'))
+    .rows[0].count;
+}
+
 const orchestrator = {
   waitForAllServices,
+  clearDB,
+  totalAppliedMigrations,
 };
 export default orchestrator;

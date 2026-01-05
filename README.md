@@ -246,7 +246,7 @@ Todos os conhecimentos adquiridos no curso.dev.
   - Não comece com letra maiúscula, todo o texto deve estar em letras minúsculas;
   - Não finalize com ponto final;
 
-- **HACK - se faça essa pergunta**: `O que esse commit faz (se ele for mesclado na branch main)?`
+- **HACK - se faça essa pergunta**: `O que esse commit faz (se ele for mesclado na branch main)? Para que ele serve?`
   - 'Adiciona um `botão maior` na interface'.
   - 'adds a `large bottom` in interface.'
 - **Português ou inglês?** Pela necessidade de prática, escrever as mensagens em inglês é,pessoalmente, melhor.
@@ -1084,3 +1084,95 @@ const invalid_query =
     - Para melhorar o desempenho vou utilizar o `lint-staged` que **retorna para a verificação apenas os arquivos que estão em stage**;
     - Agora a rotina de `pre-commit` executa `npm lint-staged`.
   - Por fim, vou adicionar um `workflow` que executa o `npx secretlint "**/*"` para a validação também ocorrer no CI.
+
+---
+
+# Licença
+
+- Existem diferentes tipos de licenças, cada uma com **regras**, proteções legais, próprias. A escolhida para o desenvolvimento do projeto foi a `MIT LICENCE`,
+  que é **dominante** no mundo de desenvolvimento open-source.
+
+---
+
+# Etapa de Manutenção (intalando novas versões dos módulos)
+
+- **Semantic Versioning**
+  - estrutura formada por três número separados por pontos: `major.minor.patch`
+    - `patch`: praticamente nenhuma diferênciação para o consumidor final, **sem** BREAKING CHANGES;
+    - `minor`: adiona um novo recurso, **sem** BREAKING CHANGES;
+    - `major`: alguma coisa na API pública mudou, **com** BREAKING CHANGE.
+
+  ```json
+  /*
+  package.json
+    - Caso não exista um `package-lock.jsos`
+  */
+
+  "next": "13.1.6" => instala a exata versão,
+  "next": "^13.1.6" => dá ao npm a autonomia para instalar outras versões com `minor` e `patch` diferente,
+  "next": "~13.1.6" => dá ao npm a autonomia para instalar outras versões, apenas, com `patch` diferente
+  ```
+
+- `npm outdated` para verificar módulos desatualizados;
+
+- Vamos atualizar as depedências de forma **interativa** com o comando `npx npm-check-updates -i` que instala e roda esse módulo temporariamente;
+
+- `Peer Dependecies` ou `Shared Dependencies`: é muito comum que módulos tenha dependências compartilhadas, ou seja, duas ou + bibliotecas utilizam um mesmo módulo internamente; Para economizar processamento o node.js tenta organizar as dependências de forma hierárquica com uma árvore de dependências, assim esse pares utilizam uma única instalação; Isso pode causar um conflito quanto das versões aceitas por cada módulo:
+
+```bash
+npm error Conflicting peer dependency: @typescript-eslint/parser@8.51.0
+---
+npm error node_modules/@typescript-eslint/parser
+npm error   peer @typescript-eslint/parser@"^8.51.0" from @typescript-eslint/eslint-plugin@8.51.0
+---
+npm error   node_modules/@typescript-eslint/eslint-plugin
+npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 || ^8.0.0" from eslint-plugin-jest@28.8.0
+---
+```
+
+- O módulo `eslint-puglin` solicita o parser instalado na versão _"^8.51.0"_, mas o `eslint-plugin-jest` quer alguma dessas versões: _"^6.0.0 || ^7.0.0 || ^8.0.0"_ e, verificando no `package-lock.json`, ele está instalado na versão _"7.2.0"_; Por fim, para resolver o problema, basta atualizar essa dependência;
+  - Não é uma boa prática deixar um pacote desse tipo instalado na raiz do projeto, vamos desinstala-lo com o `npm uninstall @typescript-eslint/parser`; e, para resolver o problema de outra forma: `rm -rf package-lock.json` e reinstalar tudo novamente: `npm i`;
+
+---
+
+# Meus alias
+
+```bash
+[alias]
+
+	# Status
+	st = status
+	s = status -sb
+
+	# Navegação
+	ck = checkout
+	br = branch
+	recent = branch --sort=-committerdate
+
+	# Commits
+	cm = commit -m
+	ac = !git add -A && git commit -m
+	wip = !git add -A && git commit -m 'WIP'
+
+	# Amend
+	ca = commit --amend
+	cane = commit -a --amend --no-edit
+
+	# Desfazer
+	undo = reset HEAD~1 --soft
+	unstage = reset HEAD --
+
+	# Logs
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lol = log --oneline --graph --decorate --all
+	last = log -1 HEAD
+	ls = log --pretty=format:'%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]' --decorate --date=short
+
+	# Diffs
+	df = diff
+	dfc = diff --cached
+
+	# Sincronização
+	pushf = push --force-with-lease
+	up = pull --rebase --autostash
+```
