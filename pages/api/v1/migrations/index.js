@@ -27,9 +27,20 @@ export default async function migrations(request, response) {
       migrationsTable: "pg-migrations",
     });
 
-    return response.status(200).json({
-      [isDryRun ? "pendingMigrations" : "appliedMigrations"]: result ?? [],
-    });
+    if (isDryRun) {
+      return response.status(200).json({
+        pendingMigrations: result ?? [],
+      });
+    } else if (!isDryRun && result.length > 0) {
+      console.log("RESULT: ", result);
+      return response.status(201).json({
+        appliedMigrations: result,
+      });
+    } else {
+      return response.status(200).json({
+        appliedMigrations: [],
+      });
+    }
   } catch (error) {
     console.error(error);
     throw error;
