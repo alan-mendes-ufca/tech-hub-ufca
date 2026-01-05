@@ -1,7 +1,9 @@
-import db from "infra/database";
 import orchestrator from "tests/orchestrator";
 
-beforeAll(async () => await orchestrator.waitForAllServices());
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
+  await orchestrator.clearDB();
+});
 
 describe("POST to /api/v1/migrations", () => {
   describe("Anonymous user", () => {
@@ -23,10 +25,7 @@ describe("POST to /api/v1/migrations", () => {
 
         // Validando o número de linhas do pg-migrations, sendo maior que zero a migration foi executada.
         expect(
-          parseInt(
-            (await db.query('SELECT COUNT(*) FROM "public"."pg-migrations";'))
-              .rows[0].count,
-          ),
+          parseInt(await orchestrator.totalAppliedMigrations()),
         ).toBeGreaterThan(0);
       });
       test("For the second time", async () => {

@@ -1,5 +1,5 @@
-import db from "infra/database";
 import orchestrator from "tests/orchestrator.js";
+
 /*
 - O Jest@10.8.2 não suporta o `ECMAScript Modules (ESM)`! Diferente mente do next.js, 
  que utiliza um compilador `swc` para transpilar seu código moderno, para versões anteriores. 
@@ -14,7 +14,7 @@ import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-  await db.query("DROP schema public cascade; create schema public;");
+  await orchestrator.clearDB();
 });
 
 describe("GET to /api/v1/migrations", () => {
@@ -27,10 +27,7 @@ describe("GET to /api/v1/migrations", () => {
 
       expect(typeof responseBody1).toBe("object");
       expect(responseBody1.pendingMigrations.length).toBeGreaterThan(0);
-      expect(
-        (await db.query('SELECT COUNT(*) FROM  "public"."pg-migrations";'))
-          .rows[0].count,
-      ).toEqual("0");
+      expect(await orchestrator.totalAppliedMigrations()).toEqual("0");
     });
   });
 });
