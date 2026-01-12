@@ -7,7 +7,7 @@ async function status(request, response) {
       database: {
         version: await databaseVersionResult(),
         max_connections: parseInt(await maxConnections()),
-        aponed_connections: await opedConnectionsValues(),
+        oponed_connections: await opedConnectionsValues(),
       },
     },
   });

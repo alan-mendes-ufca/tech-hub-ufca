@@ -23,7 +23,7 @@ describe("GET to /api/v1/status", () => {
       expect(responseBody.dependencies.database.max_connections).toEqual(100);
 
       // database apened connections test
-      expect(responseBody.dependencies.database.aponed_connections).toEqual(1);
+      expect(responseBody.dependencies.database.oponed_connections).toEqual(1);
     });
   });
 });

@@ -32,7 +32,6 @@ export default async function migrations(request, response) {
         pendingMigrations: result ?? [],
       });
     } else if (!isDryRun && result.length > 0) {
-      console.log("RESULT: ", result);
       return response.status(201).json({
         appliedMigrations: result,
       });
