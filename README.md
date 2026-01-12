@@ -1,8 +1,10 @@
-# jornada-tabnews
+# TechHub UFCA - Jornada de Aprendizado
 
-Todos os conhecimentos adquiridos no curso.dev.
+Documentação completa dos conhecimentos adquiridos durante o desenvolvimento do projeto, baseado no curso.dev.
 
-> "Se você quiser fazer uma torta de maçã do zero, primeiro você deve inventar o universo" - Carl Sagan. Ou seja, não é necessário criar todas as coisas que você vai utilizar do zero.
+> "Se você quiser fazer uma torta de maçã do zero, primeiro você deve inventar o universo" - Carl Sagan.
+>
+> Ou seja, não é necessário criar todas as coisas do zero - use o que já existe e construa em cima.
 
 ---
 
@@ -1176,3 +1178,61 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
 	pushf = push --force-with-lease
 	up = pull --rebase --autostash
 ```
+
+---
+
+# React
+
+## Geral
+
+- requisitos de instalação: `React` e `React DOM`
+- `.jsx` -> `JavaScript XML`, permite escrever elementos html em JavaScript
+- O React não permite retornar vários elementos separados, eles precisam estar aninhados em um elemento pai (`<div></div>` ou `<></>`)
+
+## Componentes
+
+- Aplicativos React são formados por componentes;
+- **componentes** são partes da interface que possuem sua própria `aparência, funcionalidade e memória`, _essas partes vão de um pequeno botão até uma páguina inteira_;
+  - são `funções javascript que retornam html`
+  ```jsx
+  export default function button() {
+    return <buttom>Hello word</buttom>;
+  }
+  ```
+
+  - `export default` especifica o componente raiz da páguina;
+- `{ }` indicam que está sendo passado um **código javaScript**, não uma string literal
+
+## Estilos
+
+- `className` para definir uma classe css (`<img className="avatar" />`)
+  - uma das formas de linkar a style sheet é utilizar uma **tag** `<link>` dentro do retorno
+  - outra forma mais convênvional é apenas **importar** o arquivo `.css` dentro do `.jsx`
+  - Também é possível utilizar o **atributo** `style`, geralmente utilizado quando o estilo depende de variáveis
+
+## Renderização condicional
+
+- o uso de condições pode ser feito normalmente com `if`, por `ternários`, dentro do jsx, e operadores lógicos (`&& e ||`)
+
+## Renderizando listas
+
+- `map()`
+  - o `map()` é muito **semelhamente** ao `forEach()`: os dois iteram sob uma lista de forma mais semântica e chamam uma função para cada elemento.
+  - Sua _diferença fundamental_ é dada pelo **retorno**:
+    - `forEach()` retorna `undefined`
+    - `map()` retorna uma nova lista com os dados modificados
+
+## Respondendo a eventos
+
+- funções de **event handler**(`onClick`, `onChange`, `onSubmit`, etc) podem ser declaradas dentro de componentes
+
+## Hooks
+
+- `import { useState } from 'react';`: adiciona a funcionalidade de **memória** ao componente
+  - Ao utilizar um estado, será retornado o estado atual e uma função que permite atualiza-lo (`[algo, setAlgo]`)
+
+# Datafetchin
+
+- Convênvionalmente o React recomenta o uso de Datafetchins ao invés de fazer búscas com javaScript puro
+- `SWR`
+- Interfaces não podem utilizar `await`
