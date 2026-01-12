@@ -1194,6 +1194,7 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
 - Aplicativos React são formados por componentes;
 - **componentes** são partes da interface que possuem sua própria `aparência, funcionalidade e memória`, _essas partes vão de um pequeno botão até uma páguina inteira_;
   - são `funções javascript que retornam html`
+
   ```jsx
   export default function button() {
     return <buttom>Hello word</buttom>;
@@ -1201,6 +1202,7 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
   ```
 
   - `export default` especifica o componente raiz da páguina;
+
 - `{ }` indicam que está sendo passado um **código javaScript**, não uma string literal
 
 ## Estilos
