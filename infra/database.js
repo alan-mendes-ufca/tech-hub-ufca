@@ -1,19 +1,17 @@
-// `databse.js` é uma forma centralizada de fazer querys no banco de dados.
 import { Client } from "pg";
 
 async function query(queryObject) {
-  // Inicializando cliente com as variáveis de ambiente.
   let client;
+
   try {
     client = await getNewClient();
     const result = await client.query(queryObject);
-    // Se houver um return dentro do try ou do catch, o bloco finally é SEMPRE executado antes que o retorno aconteça.
     return result;
   } catch (error) {
     console.error("Erro ao inicializar o banco de dados: ", error);
-    throw error; // faz com que o finally não seja executado, lançando um erro e travando o sistema.
+    throw error;
   } finally {
-    await client.end();
+    await client?.end();
   }
 }
 
