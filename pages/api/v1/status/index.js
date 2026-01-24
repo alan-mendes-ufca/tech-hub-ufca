@@ -1,16 +1,27 @@
 import db from "infra/database.js";
+import { InternalServerError } from "infra/errors";
 
 async function status(request, response) {
-  response.status(200).json({
-    updated_at: updatedAt(),
-    dependencies: {
-      database: {
-        version: await databaseVersionResult(),
-        max_connections: parseInt(await maxConnections()),
-        oponed_connections: await opedConnectionsValues(),
+  try {
+    response.status(200).json({
+      updated_at: updatedAt(),
+      dependencies: {
+        database: {
+          version: await databaseVersionResult(),
+          max_connections: parseInt(await maxConnections()),
+          oponed_connections: await opedConnectionsValues(),
+        },
       },
-    },
-  });
+    });
+  } catch (err) {
+    const publicErrorObject = new InternalServerError({
+      cause: err,
+    });
+    console.log("\n Erro dentro do catch do controller");
+    console.error(publicErrorObject);
+
+    response.status(500).json(publicErrorObject);
+  }
 }
 
 function updatedAt() {
