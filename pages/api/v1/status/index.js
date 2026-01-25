@@ -1,27 +1,23 @@
+import { createRouter } from "next-connect";
+import controller from "infra/controller";
 import db from "infra/database.js";
-import { InternalServerError } from "infra/errors";
 
-async function status(request, response) {
-  try {
-    response.status(200).json({
-      updated_at: updatedAt(),
-      dependencies: {
-        database: {
-          version: await databaseVersionResult(),
-          max_connections: parseInt(await maxConnections()),
-          oponed_connections: await opedConnectionsValues(),
-        },
+const router = createRouter();
+
+router.get(getHandler);
+export default router.handler(controller.errorHandlers);
+
+async function getHandler(request, response) {
+  response.status(200).json({
+    updated_at: updatedAt(),
+    dependencies: {
+      database: {
+        version: await databaseVersionResult(),
+        max_connections: parseInt(await maxConnections()),
+        oponed_connections: await opedConnectionsValues(),
       },
-    });
-  } catch (err) {
-    const publicErrorObject = new InternalServerError({
-      cause: err,
-    });
-    console.log("\n Erro dentro do catch do controller");
-    console.error(publicErrorObject);
-
-    response.status(500).json(publicErrorObject);
-  }
+    },
+  });
 }
 
 function updatedAt() {
@@ -48,5 +44,3 @@ async function opedConnectionsValues() {
     ).rows[0].count
   );
 }
-
-export default status;
