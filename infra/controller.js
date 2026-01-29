@@ -8,7 +8,6 @@ function onNoMatchHandler(request, response) {
 function onErrorHandler(error, request, response) {
   const publicErrorObject = new InternalServerError({
     cause: error,
-    statusCode: error.statusCode,
   });
   console.log("\n Erro dentro do catch do next-connect");
   console.error(publicErrorObject);
