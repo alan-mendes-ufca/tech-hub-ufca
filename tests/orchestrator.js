@@ -37,7 +37,7 @@ async function clearDB() {
   return await db.query("DROP schema public cascade; create schema public;");
 }
 
-async function runPedingMigrations() {
+async function runPendingMigrations() {
   await migrator.runPedingMigrations();
 }
 
@@ -49,7 +49,7 @@ async function totalAppliedMigrations() {
 const orchestrator = {
   waitForAllServices,
   clearDB,
-  runPedingMigrations,
+  runPendingMigrations,
   totalAppliedMigrations,
 };
 export default orchestrator;
