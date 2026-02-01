@@ -5,8 +5,8 @@ const STOP_COMMAND = "npm run services:down";
 
 function runServer() {
   spawn(START_COMMAND, {
-    stdio: "inherit", // Herda stdin, stdout e stderr do processo pai;
-    shell: true, // Para manter compatibilidade com o windows.
+    stdio: "inherit",
+    shell: true,
   });
 }
 
