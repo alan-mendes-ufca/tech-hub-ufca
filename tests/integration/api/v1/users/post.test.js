@@ -1,10 +1,11 @@
-import orchestrator from "tests/orchestrator";
-import database from "infra/database";
+import orchestrator from "../../../../orchestrator.js";
+import database from "../../../../../infra/database.js";
+import { version as uuidVersion } from "uuid";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
   await orchestrator.clearDB();
-  await orchestrator.runPedingMigrations();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("POST to /api/v1/users", () => {
@@ -23,8 +24,21 @@ describe("POST to /api/v1/users", () => {
       console.log(users.rows);
 
       expect(response.status).toBe(201);
+
       const responseBody = await response.json();
-      expect(typeof responseBody).toBe("object");
+      console.log(responseBody);
+      expect(responseBody).toEqual({
+        id: responseBody.id,
+        username: "alanmendes",
+        email: "alan.mendes@aluno.ufca.edu.br",
+        password: "5520240f17",
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
+      });
+
+      expect(uuidVersion(responseBody.id)).toBe(4);
+      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
     });
   });
 });
