@@ -14,6 +14,5 @@ async function getHandler(request, response) {
 
 async function postHandler(request, response) {
   const result = await migrator.runPedingMigrations();
-  console.log("RESULT: ", result);
   response.status(result.appliedMigrations.length > 0 ? 201 : 200).json(result);
 }
