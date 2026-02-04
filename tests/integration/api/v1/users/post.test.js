@@ -1,5 +1,4 @@
 import orchestrator from "../../../../orchestrator.js";
-import database from "../../../../../infra/database.js";
 import { version as uuidVersion } from "uuid";
 
 beforeAll(async () => {
@@ -11,22 +10,21 @@ beforeAll(async () => {
 describe("POST to /api/v1/users", () => {
   describe("Anonymous user", () => {
     test("With unique and valid data", async () => {
-      await database.query({
-        text: "INSERT INTO users (username, email, password) VALUES ($1, $2, $3);",
-        values: ["alanmendes", "alan.mendes@aluno.ufca.edu.br", "5520240f17"],
-      });
-
       const response = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "alanmendes",
+          email: "alan.mendes@aluno.ufca.edu.br",
+          password: "5520240f17",
+        }),
       });
-
-      const users = await database.query("SELECT * FROM users;");
-      console.log(users.rows);
 
       expect(response.status).toBe(201);
 
       const responseBody = await response.json();
-      console.log(responseBody);
       expect(responseBody).toEqual({
         id: responseBody.id,
         username: "alanmendes",
@@ -39,6 +37,140 @@ describe("POST to /api/v1/users", () => {
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+    });
+    test("With duplicated 'email'", async () => {
+      const response1 = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "emailDuplicado1",
+          email: "emailDuplicado@gmail.com",
+          password: "5520240f17",
+        }),
+      });
+
+      expect(response1.status).toBe(201);
+
+      const responseBody = await response1.json();
+      expect(responseBody).toEqual({
+        id: responseBody.id,
+        username: "emailDuplicado1",
+        email: "emailDuplicado@gmail.com",
+        password: "5520240f17",
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
+      });
+
+      expect(uuidVersion(responseBody.id)).toBe(4);
+      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+      const response2 = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "emailDuplicado2",
+          email: "EmailDuplicado@gmail.com",
+          password: "5520240f17",
+        }),
+      });
+
+      expect(response2.status).toBe(400);
+
+      const responseBody2 = await response2.json();
+      expect(responseBody2).toEqual({
+        name: "ValidationError",
+        message: "Email informado já está sendo utilizado.",
+        action: "Utilize outro email para realizar o cadastro.",
+        status_code: 400,
+      });
+    });
+    test("With duplicated 'username'", async () => {
+      const response1 = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "usernameDuplico",
+          email: "usernameDuplico1@gmail.com",
+          password: "5520240f17",
+        }),
+      });
+
+      expect(response1.status).toBe(201);
+
+      const response2 = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "UsernameDuplico",
+          email: "usernameDuplico2@gmail.com",
+          password: "5520240f17",
+        }),
+      });
+
+      expect(response2.status).toBe(400);
+
+      const responseBody2 = await response2.json();
+      expect(responseBody2).toEqual({
+        name: "ValidationError",
+        message: "Username informado já está sendo utilizado.",
+        action: "Utilize outro username para realizar o cadastro.",
+        status_code: 400,
+      });
+    });
+    test("With empty 'email'", async () => {
+      const response = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "usernameDuplico",
+          email: "",
+          password: "5520240f17",
+        }),
+      });
+
+      expect(response.status).toBe(400);
+
+      const responseBody = await response.json();
+      expect(responseBody).toEqual({
+        name: "ValidationError",
+        message: "Email não informado.",
+        action: "Utilize um email para realizar o cadastro.",
+        status_code: 400,
+      });
+    });
+    test("With empty 'username'", async () => {
+      const response = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "",
+          email: "teste@gmail.com",
+          password: "5520240f17",
+        }),
+      });
+
+      expect(response.status).toBe(400);
+
+      const responseBody1 = await response.json();
+      expect(responseBody1).toEqual({
+        name: "ValidationError",
+        message: "Username não informado.",
+        action: "Utilize um username para realizar o cadastro.",
+        status_code: 400,
+      });
     });
   });
 });
