@@ -1,5 +1,5 @@
 import database from "../infra/database.js";
-import { ValitationError } from "../infra/errors.js";
+import { NotFoundError, ValitationError } from "../infra/errors.js";
 
 async function create(userInputValues) {
   await validateEmail(userInputValues.email);
@@ -85,7 +85,35 @@ async function create(userInputValues) {
   }
 }
 
+async function findOneByUsername(username) {
+  const userFound = runSelectQuery(username);
+  return userFound;
+  async function runSelectQuery(username) {
+    const response = await database.query({
+      text: `
+    SELECT 
+      * 
+    FROM 
+      users 
+    WHERE 
+      LOWER(username) = ($1)
+    LIMIT
+      1
+    ;`,
+      values: [username],
+    });
+    if (!response.rows.length > 0) {
+      throw new NotFoundError({
+        message: "Usuário não encontrado.",
+        action: "Registre um usuário ou digite um username válido.",
+      });
+    }
+    return response.rows[0];
+  }
+}
+
 const user = {
   create,
+  findOneByUsername,
 };
 export default user;
