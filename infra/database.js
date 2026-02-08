@@ -1,5 +1,6 @@
-import { Client } from "pg";
-import { ServicesError } from "./errors";
+import pkg from "pg";
+const { Client } = pkg;
+import { ServicesError } from "./errors.js";
 
 async function query(queryObject) {
   let client;
@@ -40,7 +41,7 @@ function getSSLValues() {
     return process.env.POSTGRES_CA;
   }
 
-  return process.env.NODE_ENV == "development" ||
+  return process.env.NODE_ENV === "development" ||
     process.env.NODE_ENV === "test"
     ? false
     : true;

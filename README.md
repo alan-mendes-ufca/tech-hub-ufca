@@ -572,47 +572,10 @@ o sucesso de projetos pessoais baseam-se em dois pilares: moral x técnica.
   - BLUE: refatorar o código.
 
 ```js
-test("One", () => {
-  expect(1).toBe(1); // valor gerado dinâmicamente(Softcoded), valo esperado(Hardcoded)
-});
-
-test("nomeDoTeste", callbackFunction);
-function callbackFunction() {
-  console.log("Traditional Function");
-}
-
-test("testName", function () {
-  console.log("Anonymous Function");
-});
-
-test("testName", () => {
-  console.log("Arrow function");
-});
-```
-
-```js
-// -------------------------------------------------------------------------
-// Atacando o código por todos os lados
-const calculator = require("../models/calculator.js");
-
-test("testingSum(2+2)", () => {
-  // semelhante ao python: assert sum(2, 2) == 4
-  expect(calculator.sum(2, 2)).toBe(4); // Softcoded, hardcoded
-});
-
-test("testingSum('2', '2')", () => {
-  // semelhante ao python: assert sum(2, 2) == 4
-  expect(calculator.sum("2", "2")).toBe("Error"); // Softcoded, hardcoded
-});
-
-test("testingSum('2', '2')", () => {
-  // semelhante ao python: assert sum(2, 2) == 4
-  expect(calculator.sum("2", 2)).toBe("Error"); // Softcoded, hardcoded
-});
-
-test("testingSum(2, '2')", () => {
-  // semelhante ao python: assert sum(2, 2) == 4
-  expect(calculator.sum(2, "2")).toBe("Error"); // Softcoded, hardcoded
+describe("Context", () => {
+  test("testName", function () {
+    expect(x).toBe(x);
+  });
 });
 ```
 
@@ -1233,8 +1196,72 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
 - `import { useState } from 'react';`: adiciona a funcionalidade de **memória** ao componente
   - Ao utilizar um estado, será retornado o estado atual e uma função que permite atualiza-lo (`[algo, setAlgo]`)
 
-# Datafetchin
+## Datafetchin
 
 - Convênvionalmente o React recomenta o uso de Datafetchins ao invés de fazer búscas com javaScript puro
 - `SWR`
 - Interfaces não podem utilizar `await`
+
+---
+
+# Rest API
+
+- É um acrônimo apra `REpresentational State Tranfer Aplication Programming Interface`
+- Um **estilo de arquitetura** para _sistemas distribuídos de hipermídia_ (imagens, texto, áudio e vídeo)
+  - Word Wide Web e Intranets são exempos de sitemas distruídos de hipermídia. Ou seja, REST é `uma arquitetura que se diz respeito a meios de comunicação`.
+- `Dados e funcionalidade = Recursos, acessados por meio de endpoints`
+
+## REST x RESTful
+
+- **REST**, como todas os outros estilos de arquitetura, tem seus próprios _princípios e restrições_. Uma interface se diz **REST API (ou RESTful)** quando satisfaz todos essas regras.
+
+## Princípios e Restrições
+
+- Por meio de suas regras, o REST promove o desenvolvimento de aplicações `simples, escaláveis e sem estado`.
+
+1. **Uniform Interface** (Organização e Padronização)
+
+- A interface de interação entre o cliente e o servidor deve ser conciênte e uniforme, seguindo 4 pilares:
+  - _Identificação de recursos_: recursos devem ter endereços unícos (`api/v1/status`, sequências de substantivos, nunca utilizar verbos)
+  - _Manipulação via representação_: o cliente nunca deve acessar o banco de dados diretamente, as manipulações devem feitas em um JSON e retornadas para o servidos aplicar o novo estado.
+  - _Mensagens Autodescritivas_ (Metadados): requisições e respostas devem conter informações sobre _"Tudo ocorreu bem"? "O que é?" e "O que fazer?" com aqueles bits_.
+  - _HATEOAS_: a API deve enviar links para os próximos passos.
+    ```json
+    {
+      "id": 100,
+      "saldo": 500.0,
+      "_links": {
+        "self": { "href": "/contas/100" },
+        "depositar": { "href": "/contas/100/deposito" },
+        "sacar": { "href": "/contas/100/saque" },
+        "extrato": { "href": "/contas/100/extrato" }
+      }
+    }
+    ```
+
+2. Cliente e Servidor (Separação)
+
+- **Separação de responsabilidades**
+  - O cliente e o servidor devem ser **independêntes**, assim o código de ambos podem evoluir separadamente (lógico, sem causar mudanças na referência de dados).
+
+- `Cliente: faz requisições, salva sessões e interpreta respostas.`
+- `API/Servidor: processa requisições, faz validações de segurança, faz ponte entre o cliente e o banco de dados.`
+
+3. Stateless (Escalabilidade)
+
+- cada requisição deve ter informações completas para que o servidor possa executar a instrução.
+- sessões não são armazenadar nos servidor, ele cumpre apenas o seu papel de
+
+4. Cacheable (Performace)
+
+- Metadados
+- Respostas devem contem um cabeçalho que indique se aqueles dados devem ser salvos ou não.
+
+5. Sistema em camadas (Segurança e escalabilidade)
+
+- O cliente não precisa saber se está conectado ao servidor final ou a um intermediário (Load Balancer, Proxy de segurança, etc)
+
+6. Código sob demanda (opcional)
+
+- Scrips executáveis podem ser enviados do servidor para o cliente.
+- Geralmente APIs REST modernas servem apenas dados (JSON).
