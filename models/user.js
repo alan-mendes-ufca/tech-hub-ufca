@@ -96,7 +96,7 @@ async function findOneByUsername(username) {
     FROM 
       users 
     WHERE 
-      LOWER(username) = ($1)
+      LOWER(username) = LOWER($1)
     LIMIT
       1
     ;`,
