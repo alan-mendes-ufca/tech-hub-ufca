@@ -1,5 +1,5 @@
 import orchestrator from "../../../../../orchestrator.js";
-
+import { version as uuidVersion } from "uuid";
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
   await orchestrator.clearDB();
@@ -9,21 +9,12 @@ beforeAll(async () => {
 describe("GET to /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
     test("With exact case match", async () => {
-      const insertedUserResponse = await fetch(
-        "http://localhost:3000/api/v1/users/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: "alanmendes",
-            email: "alan49931@gmail.com",
-            password: "5520240f17",
-          }),
-        },
-      );
-      const insertedUser = await insertedUserResponse.json();
+      await orchestrator.createUser({
+        username: "alanmendes",
+        email: "alan49931@gmail.com",
+        password: "5520240f17",
+      });
+
       const response = await fetch(
         "http://localhost:3000/api/v1/users/alanmendes",
       );
@@ -33,37 +24,36 @@ describe("GET to /api/v1/users/[username]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        ...insertedUser,
+        id: responseBody.id,
+        username: "alanmendes",
+        email: "alan49931@gmail.com",
+        password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
+
+      expect(uuidVersion(responseBody.id)).toBe(4);
+      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
     });
     test("With case mismatch", async () => {
-      const insertedUserResponse = await fetch(
-        "http://localhost:3000/api/v1/users/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: "CaseDiferente",
-            email: "CaseDiferente@gmail.com",
-            password: "5520240f17",
-          }),
-        },
-      );
-      const insertedUser = await insertedUserResponse.json();
+      await orchestrator.createUser({
+        username: "CaseDiferente",
+        email: "CaseDiferente@gmail.com",
+        password: "5520240f17",
+      });
+
       const response = await fetch(
         "http://localhost:3000/api/v1/users/casediferente",
       );
-
+      const responseBody = await response.json();
       expect(response.status).toBe(200);
 
-      const responseBody = await response.json();
-
       expect(responseBody).toEqual({
-        ...insertedUser,
+        id: responseBody.id,
+        username: "CaseDiferente",
+        email: "CaseDiferente@gmail.com",
+        password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -79,7 +69,7 @@ describe("GET to /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         name: "NotFoundError",
         message: "Usuário não encontrado.",
-        action: "Registre um usuário ou digite um username válido.",
+        action: "Utilize outro username para realizar esta operação.",
         status_code: 404,
       });
     });

@@ -106,31 +106,39 @@ Documentação completa dos conhecimentos adquiridos durante o desenvolvimento d
 
 ---
 
-## Git
+## Git - Content-Addressable Object Database
 
 - Sistema centralizado x Sistema distribuído.
   - centralizado: a cópia principal está no servidor e as pessoas _reservam_
     um arquivo para ser alterado, impedindo outros desenvolvedores de acessarem antes de um _checkout_ ser feito.
   - distribuído: cada desenvolvedor tem uma cópia do seu projeto na sua máquina, também resolve problemas de merge.
 
-- O git funciona baseando-se em alguns objetos:
-  - tree: árvore de pastas que apontam para arquivos.
-  - blob (Binary Large Object): conteúdo bruto de um arquivo (comprimido e endereçado).
-  - commit(compromisso): snapshot
-  - tags: ...
+### Objetos git
 
-- Estágios que os arquivos passam 0. Untracked: o git ainda não está monitorando aquele arquivo.
-  1. Modified: um arquivo já salvo pelo git está modificado.
-  2. Staged: área de preparo, será salvo pelo commit.
-  3. Commit: Cria-se uma snapshot _imutável_ com as alterações consolidadas (Uma árvore de blobs + metadados).
+- `Commit (Compromisso)`
+  - Objetos imutáveis, formados por metadados e identificadores (hash) para a tree raiz e o commit anterior (pai); grava o **estado do projeto** permanentemente.
 
-```md
-- Como realmente funciona o git?
-  - O git não salva a diferença entre os arquivos, nem muito menos cópias completas.
-  - Na verdade, ele só salva snapshots de arquivos que foram realmente modificados!
-    - Ao calcular um hash do conteúdo, se tiver o mesmo valor: o arquivo não mudou, logo o ponteiro deve continuar apontando para a versão já salva;
-    - Se mudou o ponteiro salva o BLOB desse arquivo no banco e a árvore passa a apontar para o hash desse blob.
-```
+- `Blobs (Binary Large Object)`
+  - **Conteúdo bruto** de um arquivo compactado em bytes.
+
+- `Trees`:
+  - Árvore de identificadores para BLOBs e outras subtrees; representando o **diretório** como um todo.
+
+- `TAGs`
+- Objeto que referência permanentemente um commit; utilizado para marcar **versões**.
+
+### Estágios
+
+0. Untracked: o git ainda não está monitorando aquele arquivo.
+1. Modified: um arquivo já salvo pelo git está modificado.
+2. Staged: área de preparo, será salvo pelo commit.
+3. Commit: Cria-se uma snapshot _imutável_ com as alterações consolidadas (Uma árvore de blobs + metadados).
+
+### Como realmente funciona o git?
+
+- O git não salva a diferença entre os arquivos, nem muito menos cópias completas. Na verdade, ele só salva snapshots de arquivos que foram realmente modificados!
+  - Ao calcular um hash do conteúdo, se tiver o mesmo valor: o arquivo não mudou, logo o ponteiro deve continuar apontando para a versão já salva;
+  - Se mudou o ponteiro salva o BLOB desse arquivo no banco e a árvore passará a apontar para o hash desse blob.
 
 - Comandos
   - git status: mudanças desde o último commit, branch atual.
@@ -285,7 +293,7 @@ Documentação completa dos conhecimentos adquiridos durante o desenvolvimento d
   - `--soft`: **preserva e aplica** as alterações na estage area;
   - `--mixed`(padrão): as alterações são **apenas preservadas**, mas não são aplicadas na estage area.
 
-- `git rebase <commit-hash>`: reaplica commits encima de outro commit base;
+  - `git rebase <branch-base>`: o git identificará o ponto de divergência e aplicará os novos commits (aqueles a frente da divergência) encima da nova base
 
 - `git rebase --interactive <commit-hash>`(`-i`): após definir um commit base, permite reaplicar e modificar commits encima da base;
 
@@ -1265,3 +1273,40 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
 
 - Scrips executáveis podem ser enviados do servidor para o cliente.
 - Geralmente APIs REST modernas servem apenas dados (JSON).
+
+---
+
+# Como armazenar senhas?
+
+- Nível 5
+  - Armazenar a senha em `texto puro`, totalmente exposta
+
+- Nível 4
+  - A senha passa por um algoritmo de `encriptação` e é salva no banco de dados
+
+- Nível 3
+  - One Way-Function: não é possível recuperar as informações originais
+  - Hash PURO: identificador determinístico (identificadores únicos são gerados e pela singularidade determinam um dado).
+    - MD5: criptograficamento quebrado e inadequado para uso futuro
+    - SHA-1: utilizado pelo git, mais completo que o MD5; entretando, já depreciado
+    - SHA-256: maior que o SHA-1 (40 caracteres x 64), amplamente utilizado atualmente
+
+- Nível 2
+  - `Hash + Salt`
+  - `HashFinal = bcrypt(password)`
+    - O `Salt` é um valor randômico, gerado por meio da senha, que fica armazenado no banco de dados para futuras validações
+    - Sem o salt, duas senhas iguais de diferentes usuário teriam o mesmo hash
+
+  - `Bcrypt`: os algoritmos anteriores são projetados para serem gerados o mais rápido possível (1ms); o Bcript, por meio da propiedade ROUND, consegue embaralhar a senha mais vezes, por mais tempo.
+    - **Utilizado especificamente para armazenar senhas**
+    - Já inclui o salt no HASH gerado, com isso não precisa armazena-lo no banco
+    - A cada ROUD, o custo aumenta de forma exponencial; necessita de um balanceamento
+    - **Ainda, o Bcrypt gera o identificador concatenando sua versão, o número de round, o salt e o hash (separados por $)**
+    - Todos esses fatores contibuem no aumento do custo de processamento pro hacker
+
+- Nível 1
+  - `Hash + Salt + Pepper`
+  - `HashFinal = Bcrypt(password + pepper)`
+  - `Pepper`, dado com alta entropia, concatenado a senha antes do salt.
+    - Onde armazenar o pepper?
+      - A melhor opção é guardar dentro de uma variável de ambiente
