@@ -3,6 +3,10 @@ import bcryptjs from "bcryptjs";
 async function hash(password) {
   const rounds = getNumberOfRounds();
 
+  if (!password) {
+    throw new Error("Password não está definida");
+  }
+
   if (!process.env.PASSWORD_PEPPER) {
     throw new Error("PASSWORD_PEPPER não está configurado!");
   }
