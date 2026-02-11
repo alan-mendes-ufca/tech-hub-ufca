@@ -6,7 +6,7 @@ export class InternalServerError extends Error {
 
     this.name = "InternalServerError";
     this.action = "Entre em contato com o suporte.";
-    this.statusCode = cause.statusCode || 500;
+    this.statusCode = 500;
   }
 
   toJSON() {
@@ -87,6 +87,25 @@ export class NotFoundError extends Error {
       action || "Verifique se os parâmetros enviados na consulta estão certos.";
     this.statusCode = 404;
   }
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class UnautorizedError extends Error {
+  constructor({ message, action }) {
+    super(message || "Dados de autenticação não conferem.");
+
+    this.name = "UnautorizedError";
+    this.action = action || "Verifique se os dados enviados estão corretos";
+    this.statusCode = 401;
+  }
+
   toJSON() {
     return {
       name: this.name,

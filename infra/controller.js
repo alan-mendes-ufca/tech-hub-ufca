@@ -3,6 +3,7 @@ import {
   InternalServerError,
   ValitationError,
   NotFoundError,
+  UnautorizedError,
 } from "./errors.js";
 
 function onNoMatchHandler(request, response) {
@@ -11,7 +12,11 @@ function onNoMatchHandler(request, response) {
 }
 
 function onErrorHandler(error, request, response) {
-  if (error instanceof ValitationError || error instanceof NotFoundError) {
+  if (
+    error instanceof ValitationError ||
+    error instanceof NotFoundError ||
+    error instanceof UnautorizedError
+  ) {
     response.status(error.statusCode).json(error);
   }
 

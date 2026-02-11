@@ -1310,3 +1310,21 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
   - `Pepper`, dado com alta entropia, concatenado a senha antes do salt.
     - Onde armazenar o pepper?
       - A melhor opção é guardar dentro de uma variável de ambiente
+
+---
+
+# Login
+
+- `Autenticação` (_Quem está se autenticando?_)
+- `Autorização` (_O que está autorizado a fazer?_)
+
+- `Cookie`
+  - `Set-Cookie`: cabeçalho http com dados que o navegador deve armazenar no `Cookie Jar`
+  - Cookies sozinhos não resolvem problemas importantes:
+    - a cada requisição o sistema precisa relogar o usuário (email e senha presentes no cookie durante requisições e respostas),
+    - recalcular o hash da senha durante o login (consome bastante processamento)
+    - dados visíveis (vulnerabilidade)
+
+- `Session-based Authentication`
+  - Ao autenticar-se, a API gera um `Opaque Session Token` que é salvo no banco de dados juntamente com sua **data de validade**. Assim, ao invés de informações sensíveis ficares salvos no cookie, apenas esse **sesson_id** estaria sendo transmitido. Outro problema resolvido é a necessidade de recalcular o hash múltiplas vezes.
+  - Um problema referente a essa técnica seria o `Session hijacking (sequestro de sessão)`, realizado por meio de **engenharia social**; consiste em copiar os cookies de sessão sequestratos e hackear as contas do usuário.
