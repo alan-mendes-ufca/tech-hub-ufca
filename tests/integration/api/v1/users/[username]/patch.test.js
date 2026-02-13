@@ -121,7 +121,9 @@ describe("PATCH to /api/v1/users/[username]", () => {
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
-      expect(responseBody.created_at).not.toEqual(responseBody.updated_at);
+      expect(Date.parse(responseBody.created_at)).not.toEqual(
+        Date.parse(responseBody.updated_at),
+      );
     });
     test("With change 'email'", async () => {
       const createdUser = await orchestrator.createUser({
@@ -156,7 +158,9 @@ describe("PATCH to /api/v1/users/[username]", () => {
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
-      expect(responseBody.created_at).not.toEqual(responseBody.updated_at);
+      expect(Date.parse(responseBody.created_at)).not.toEqual(
+        Date.parse(responseBody.updated_at),
+      );
     });
     test("With new 'password'", async () => {
       const createdUser = await orchestrator.createUser({
