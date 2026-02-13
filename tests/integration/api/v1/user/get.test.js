@@ -18,6 +18,7 @@ describe("POST to /api/v1/sessions", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
+      // eslint-disable-next-line no-undef
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response = await fetch("http://localhost:3000/api/v1/user", {
@@ -88,6 +89,20 @@ describe("POST to /api/v1/sessions", () => {
         action: "Verifique se o usuário está logado e tente novamente.",
         status_code: 401,
       });
+
+      // Clear Set-Cookie assertion
+      const parsedSetCookie = cookie.parseSetCookie(
+        response.headers.getSetCookie()[0],
+      );
+
+      expect(parsedSetCookie).toEqual({
+        name: "session_id",
+        value: "invalid",
+        maxAge: -1,
+        path: "/",
+        httpOnly: true,
+        secure: true,
+      });
     });
 
     test("With expired 'session'", async () => {
@@ -118,6 +133,20 @@ describe("POST to /api/v1/sessions", () => {
         action: "Verifique se o usuário está logado e tente novamente.",
         status_code: 401,
       });
+
+      const parsedSetCookie = cookie.parseSetCookie(
+        response.headers.getSetCookie()[0],
+      );
+
+      // Clear Set-Cookie assertion
+      expect(parsedSetCookie).toEqual({
+        name: "session_id",
+        value: "invalid",
+        maxAge: -1,
+        path: "/",
+        httpOnly: true,
+        secure: true,
+      });
     });
 
     test("With 'session' in halfway to expiration", async () => {
@@ -138,7 +167,6 @@ describe("POST to /api/v1/sessions", () => {
           Cookie: `session_id=${sessionObject.token}`,
         },
       });
-
       expect(response.status).toBe(200);
 
       const renewedSessionObject = await session.findOneValidByToken(

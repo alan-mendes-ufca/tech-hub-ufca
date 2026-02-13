@@ -15,11 +15,12 @@ function onNoMatchHandler(request, response) {
 }
 
 function onErrorHandler(error, request, response) {
-  if (
-    error instanceof ValitationError ||
-    error instanceof NotFoundError ||
-    error instanceof UnautorizedError
-  ) {
+  if (error instanceof ValitationError || error instanceof NotFoundError) {
+    response.status(error.statusCode).json(error);
+  }
+
+  if (error instanceof UnautorizedError) {
+    clearSessionCookie(response);
     response.status(error.statusCode).json(error);
   }
 
@@ -41,12 +42,23 @@ async function setSessionCookie(sessionToken, response) {
   response.setHeader("Set-Cookie", setCookie);
 }
 
+async function clearSessionCookie(response) {
+  const setCookie = cookie.serialize("session_id", "invalid", {
+    path: "/",
+    maxAge: -1,
+    secure: true,
+    httpOnly: true,
+  });
+  response.setHeader("Set-Cookie", setCookie);
+}
+
 const controller = {
   errorHandlers: {
     onNoMatch: onNoMatchHandler,
     onError: onErrorHandler,
   },
   setSessionCookie,
+  clearSessionCookie,
 };
 
 export default controller;
