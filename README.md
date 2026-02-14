@@ -1377,3 +1377,56 @@ QUIT
 221 Ok
 Connection closed by foreign host.
 ```
+
+---
+
+# Correção: Erro de ESM no Jest com `node-pg-migrate`
+
+## Problema
+
+Após atualizar o `node-pg-migrate`, todos os testes falharam com:
+
+```
+node_modules/node-pg-migrate/dist/bundle/index.js:2
+import { glob } from "glob";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+```
+
+## Causa
+
+A nova versão do `node-pg-migrate` passou a usar ESM (`import`/`export`). O Jest, que roda em CommonJS, transpila os arquivos do projeto via SWC do `next/jest`, mas **ignora o `node_modules`** por padrão — então não conseguiu interpretar o código ESM da lib.
+
+## Dificuldade extra
+
+Passar `transformIgnorePatterns` direto na config do `next/jest` não funcionava, pois ele **sobrescreve silenciosamente** esse valor com o padrão interno dele.
+
+```javascript
+// ❌ Não funciona — next/jest sobrescreve o valor
+const jestConfig = creatJestConfig({
+  transformIgnorePatterns: ["/node_modules/(?!(node-pg-migrate|glob)/)"],
+});
+
+module.exports = jestConfig;
+```
+
+## Solução
+
+Modificar o `transformIgnorePatterns` **depois** que o `next/jest` gera a config:
+
+```javascript
+module.exports = async () => {
+  const config = await jestConfig();
+
+  config.transformIgnorePatterns = [
+    "/node_modules/(?!(node-pg-migrate|glob)/)",
+  ];
+
+  return config;
+};
+```
+
+Isso cria uma exceção para que o Jest transpile apenas o `node-pg-migrate` e o `glob`, mantendo o resto do `node_modules` ignorado.
+
+---

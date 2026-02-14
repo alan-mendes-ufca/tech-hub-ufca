@@ -10,9 +10,20 @@ const nextJest = require("next/jest");
 const creatJestConfig = nextJest({
   dir: ".",
 });
+
 const jestConfig = creatJestConfig({
   moduleDirectories: ["node_modules", "<rootDir>"],
   testTimeout: 60000,
 });
 
-module.exports = jestConfig;
+// next/jest sobrescreve o transformIgnorePatterns internamente,
+// então precisamos modificar a config DEPOIS que ela é gerada.
+module.exports = async () => {
+  const config = await jestConfig();
+
+  config.transformIgnorePatterns = [
+    "/node_modules/(?!(node-pg-migrate|glob)/)",
+  ];
+
+  return config;
+};
