@@ -1328,3 +1328,52 @@ npm error     peerOptional @typescript-eslint/eslint-plugin@"^6.0.0 || ^7.0.0 ||
 - `Session-based Authentication`
   - Ao autenticar-se, a API gera um `Opaque Session Token` que é salvo no banco de dados juntamente com sua **data de validade**. Assim, ao invés de informações sensíveis ficares salvos no cookie, apenas esse **sesson_id** estaria sendo transmitido. Outro problema resolvido é a necessidade de recalcular o hash múltiplas vezes.
   - Um problema referente a essa técnica seria o `Session hijacking (sequestro de sessão)`, realizado por meio de **engenharia social**; consiste em copiar os cookies de sessão sequestratos e hackear as contas do usuário.
+
+---
+
+## Serviço de Emails
+
+- http://github.com/filipedeschamps/clone-tabnews/issues/39
+
+### Como emails funcionam?
+
+Passo a passo:
+
+- Ao enviar um email, a aplicação o envia para o **servidor de saída (SMTP server)** do seu provedor, utilizando o protocolo SMTP (Simple Mail Transfer Protocol)
+  - Exemplos de provedores: Gmail, Outlook, Yahoo, etc.
+
+- O servidor SMTP do remetente consulta os registros DNS (especificamente o registro MX - Mail Exchange) para localizar o servidor de email do destinatário
+
+- Após localizar, o servidor do remetente encaminha a mensagem para o servidor do destinatário, também utilizando SMTP
+
+- O **servidor de entrada** do destinatário recebe e armazena a mensagem em uma caixa de correio
+
+- Quando o destinatário abre seu cliente de email, a mensagem é recuperada usando protocolos como:
+  - **IMAP** (Internet Message Access Protocol) - mantém emails no servidor, permitindo acesso de múltiplos dispositivos
+  - **POP3** (Post Office Protocol) - geralmente baixa e remove emails do servidor
+
+### SMTP na unha
+
+```bash
+@alan ➝ tech-hub-ufca (local-mail) $ telnet localhost 1025
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+220 EventMachine SMTP Server
+HELO alan
+250 Ok EventMachine SMTP Server
+MAIL FROM: <alan@gmail.com>
+250 Ok
+RCPT TO: <contato@curso.dev>
+250 Ok
+DATA:
+354 Send it
+Subject: Teste por Telnet
+
+Rayane, se você me ama dá uma risadinha!
+.
+250 Message accepted
+QUIT
+221 Ok
+Connection closed by foreign host.
+```
