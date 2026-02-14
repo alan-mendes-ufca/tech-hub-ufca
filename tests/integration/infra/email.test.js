@@ -19,7 +19,6 @@ describe("infra/email.js", () => {
     });
 
     const lastEmail = await orchestrator.getLastEmail();
-    console.log(lastEmail);
     expect(lastEmail.sender).toEqual("<contato@ufca.dev>");
     expect(lastEmail.recipients[0]).toEqual("<contato@curso.dev>");
     expect(lastEmail.subject).toEqual("Teste de assunto.");

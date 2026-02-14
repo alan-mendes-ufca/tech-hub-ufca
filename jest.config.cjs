@@ -23,7 +23,7 @@ module.exports = async () => {
 
   // Adicioana um regex para liberar a conversão de determinadas bibliotecas para CJS
   config.transformIgnorePatterns = [
-    "/node_modules/(?!(node-pg-migrate|glob|@faker-js/faker)/)",
+    "/node_modules/(?!(node-pg-migrate|glob|@faker-js/faker|uuid)/)",
   ];
 
   return config;

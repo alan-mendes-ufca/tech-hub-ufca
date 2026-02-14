@@ -1382,6 +1382,8 @@ Connection closed by foreign host.
 
 # Correção: Erro de ESM no Jest com `node-pg-migrate`
 
+> Essa trilha de conhecimento me ajudou também a identificar quando, ao atualizar a biblioteca, o mesmo erro acontecia. Por fim, ao identificar o motivo bastava adicionar o nome da lib ao regex de transformIgnorePatterns.
+
 ## Problema
 
 Após atualizar o `node-pg-migrate`, todos os testes falharam com:
