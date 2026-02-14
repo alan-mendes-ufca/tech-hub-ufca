@@ -21,8 +21,9 @@ const jestConfig = creatJestConfig({
 module.exports = async () => {
   const config = await jestConfig();
 
+  // Adicioana um regex para liberar a conversão de determinadas bibliotecas para CJS
   config.transformIgnorePatterns = [
-    "/node_modules/(?!(node-pg-migrate|glob)/)",
+    "/node_modules/(?!(node-pg-migrate|glob|@faker-js/faker)/)",
   ];
 
   return config;
