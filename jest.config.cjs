@@ -10,9 +10,21 @@ const nextJest = require("next/jest");
 const creatJestConfig = nextJest({
   dir: ".",
 });
+
 const jestConfig = creatJestConfig({
   moduleDirectories: ["node_modules", "<rootDir>"],
   testTimeout: 60000,
 });
 
-module.exports = jestConfig;
+// next/jest sobrescreve o transformIgnorePatterns internamente,
+// então precisamos modificar a config DEPOIS que ela é gerada.
+module.exports = async () => {
+  const config = await jestConfig();
+
+  // Adicioana um regex para liberar a conversão de determinadas bibliotecas para CJS
+  config.transformIgnorePatterns = [
+    "/node_modules/(?!(node-pg-migrate|glob|@faker-js/faker|uuid)/)",
+  ];
+
+  return config;
+};
