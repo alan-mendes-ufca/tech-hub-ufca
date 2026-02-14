@@ -5,8 +5,11 @@ import migrator from "../models/migrator.js";
 import user from "../models/user.js";
 import session from "../models/session.js";
 
+const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
+
 async function waitForAllServices() {
   await waitForWebServer();
+  await waitForEmailServer();
 
   async function waitForWebServer(
     maxRetries = 100,
@@ -34,8 +37,28 @@ async function waitForAllServices() {
       }
     }
   }
-}
+  async function waitForEmailServer(maxRetries = 100, maxTimeout = 1000) {
+    return retry(fetchEmail, {
+      retries: maxRetries,
+      maxTimeout: maxTimeout,
+      onRetry: (error, attempt) => {
+        console.log(
+          `Attempt: ${attempt} - Failed to fetch status page: ${error.message}`,
+        );
+      },
+    });
 
+    async function fetchEmail() {
+      try {
+        const response = await fetch(emailHttpUrl);
+        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+      } catch (error) {
+        console.error("Não foi possível buscar a páguina de status: ", error);
+        throw error;
+      }
+    }
+  }
+}
 async function clearDB() {
   await db.query("DROP schema public cascade; create schema public;");
 }
@@ -62,6 +85,31 @@ async function createSession(userId) {
   return await session.create(userId);
 }
 
+async function deleteAllEmails() {
+  await fetch(`${emailHttpUrl}/messages`, {
+    method: "DELETE",
+  });
+}
+
+async function getLastEmail() {
+  // Esperar o email chegar no MailCatcher
+  // eslint-disable-next-line no-undef
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 segundo
+
+  const emailListResponse = await fetch(`${emailHttpUrl}/messages`);
+  const emailListBody = await emailListResponse.json();
+
+  const lastEmailItem = emailListBody.pop();
+
+  const emailTextResponse = await fetch(
+    `${emailHttpUrl}/messages/${lastEmailItem.id}.plain`,
+  );
+
+  const emailTextBody = await emailTextResponse.text();
+  lastEmailItem.text = emailTextBody;
+  return lastEmailItem;
+}
+
 const orchestrator = {
   waitForAllServices,
   clearDB,
@@ -69,5 +117,8 @@ const orchestrator = {
   totalAppliedMigrations,
   createUser,
   createSession,
+  deleteAllEmails,
+  getLastEmail,
 };
+
 export default orchestrator;
